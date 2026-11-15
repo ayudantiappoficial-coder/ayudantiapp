@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#f8fafc" />
+<title>AyudantiApp · Tu oferta justa</title>
+<meta name="description" content="Mercado abierto de ayudantías entre estudiantes de Chile. Publica tu necesidad o tu servicio de tutoría gratis. Tu oferta justa." />
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['-apple-system','BlinkMacSystemFont','"SF Pro Display"','"Segoe UI"','Inter','system-ui','sans-serif'] },
+        boxShadow: {
+          card: '0 1px 2px rgba(15,23,42,.04), 0 10px 30px -14px rgba(15,23,42,.20)',
+          pop:  '0 30px 60px -24px rgba(15,23,42,.35)'
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+  body { background:#f8fafc; }
+  select.apple {
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>");
+    background-repeat: no-repeat; background-position: right .75rem center;
+    background-size: 1rem; padding-right: 2.5rem;
+  }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 999px; border: 3px solid #f8fafc; }
+  ::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+  @keyframes fadeUp { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform:none; } }
+  .fade-up { animation: fadeUp .35s ease both; }
+  @keyframes toastIn { from { opacity:0; transform: translateY(16px) scale(.98); } to { opacity:1; transform:none; } }
+  .toast-in { animation: toastIn .28s cubic-bezier(.2,.8,.2,1) both; }
+</style>
+</head>
+
+<body class="font-sans text-slate-900 antialiased">
+
+<header class="sticky top-0 z-40 border-b border-slate-200/70 bg-white/75 backdrop-blur-xl">
+  <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
+    <a href="#top" id="logoLink" class="flex items-center gap-2.5 select-none" title="AyudantiApp · Tu oferta justa">
+      <svg width="38" height="38" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="2" y="2" width="60" height="60" rx="16" fill="#0f172a"/>
+        <rect x="2" y="2" width="60" height="30" rx="16" fill="url(#shine)"/>
+        <path d="M18 20.5c0-1.38 1.12-2.5 2.5-2.5h8.5v25h-8.5A2.5 2.5 0 0 1 18 40.5v-20Z" fill="#e2e8f0"/>
+        <path d="M29 18h14.5c1.38 0 2.5 1.12 2.5 2.5v20c0 1.38-1.12 2.5-2.5 2.5H29V18Z" fill="#f8fafc"/>
+        <path d="M31.5 24h9.5M31.5 29h9.5M31.5 34h6.5" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M41 40.5l4.2-4.2a1.5 1.5 0 0 1 2.12 0l1.68 1.68a1.5 1.5 0 0 1 0 2.12L44.8 44.3l-4.6.9.8-4.7Z" fill="#34d399"/>
+        <path d="M43.2 42.7l3.1-3.1" stroke="#065f46" stroke-width="1.2" stroke-linecap="round"/>
+        <circle cx="49" cy="15" r="3.2" fill="#34d399"/>
+        <circle cx="49" cy="15" r="1.4" fill="#0f172a"/>
+        <defs><linearGradient id="shine" x1="32" y1="2" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff" stop-opacity=".18"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient></defs>
+      </svg>
+      <div class="leading-tight">
+        <p class="text-[15px] font-semibold tracking-tight">AyudantiApp</p>
+        <p class="-mt-0.5 text-[11px] text-slate-500">Tu oferta justa</p>
+      </div>
+    </a>
+    <nav class="hidden items-center gap-1 text-sm md:flex">
+      <a href="#mercado" class="rounded-xl px-3 py-2 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">Mercado</a>
+      <a href="#publicar" class="rounded-xl px-3 py-2 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">Publicar</a>
+      <a href="#sugerencias" class="rounded-xl px-3 py-2 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">Sugerencias</a>
+    </nav>
+    <button onclick="abrirModal('necesidad')" class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 active:scale-[.98]">Publicar gratis</button>
+  </div>
+</header>
+
+<section id="top" class="relative overflow-hidden">
+  <div class="pointer-events-none absolute -top-40 left-1/2 h-80 w-[46rem] -translate-x-1/2 rounded-full bg-gradient-to-r from-sky-100 via-white to-emerald-50 blur-3xl opacity-70"></div>
+  <div class="relative mx-auto max-w-6xl px-4 pb-10 pt-12 sm:pt-16">
+    <div class="mx-auto max-w-2xl text-center">
+      <span class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-[11px] font-medium text-slate-600 shadow-sm">
+        <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> Mercado abierto · 100% entre estudiantes
+      </span>
+      <h1 class="mt-5 text-[34px] font-semibold leading-[1.08] tracking-tight sm:text-5xl">Encuentra tu ayudantía.<br class="hidden sm:block"><span class="text-slate-400">Paga lo justo.</span></h1>
+      <p class="mx-auto mt-4 max-w-lg text-[15px] leading-relaxed text-slate-500">Alumnos publican lo que necesitan, tutores publican lo que enseñan. Sin comisiones, sin intermediarios: el trato es directo por WhatsApp.</p>
+    </div>
+    <div class="mx-auto mt-8 max-w-4xl">
+      <div class="rounded-[28px] border border-slate-200/80 bg-white p-3 shadow-card sm:p-4">
+        <div class="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="relative">
+            <label class="mb-1.5 block pl-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">Universidad</label>
+            <select id="fUni" class="apple w-full rounded-2xl border border-slate-200 bg-slate-50/60 px-3.5 py-3 text-sm text-slate-800 outline-none transition focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-slate-900/5"></select>
+          </div>
+          <div class="relative">
+            <label class="mb-1.5 block pl-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">Carrera</label>
+            <select id="fCarr" class="apple w-full rounded-2xl border border-slate-200 bg-slate-50/60 px-3.5 py-3 text-sm text-slate-800 outline-none transition focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-slate-900/5"></select>
+          </div>
+          <div class="relative">
+            <label class="mb-1.5 block pl-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">Ramo / Materia</label>
+            <select id="fRamo" class="apple w-full rounded-2xl border border-slate-200 bg-slate-50/60 px-3.5 py-3 text-sm text-slate-800 outline-none transition focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-slate-900/5"></select>
+          </div>
+          <div class="relative">
+            <label class="mb-1.5 block pl-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">Buscar</label>
+            <input id="fTexto" type="search" placeholder="Ej: certamen, integrales…" class="w-full rounded-2xl border border-slate-200 bg-slate-50/60 px-3.5 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-slate-900/5" />
+          </div>
+        </div>
+        <div class="mt-2.5 flex items-center justify-between px-1">
+          <button onclick="limpiarFiltros()" class="text-xs font-medium text-slate-500 underline-offset-4 transition hover:text-slate-900 hover:underline">Limpiar filtros</button>
+          <p class="text-[11px] text-slate-400">Los filtros se combinan: universidad + carrera + ramo</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="mx-auto max-w-6xl px-4">
+  <div class="rounded-3xl border border-dashed border-slate-200 bg-white/60 p-4">
+    <p class="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">Publicidad</p>
+    <div class="grid h-24 place-items-center rounded-2xl text-center text-xs text-slate-400 sm:h-28">Espacio reservado para banner de Google AdSense</div>
+  </div>
+</div>
+
+<section id="mercado" class="mx-auto max-w-6xl px-4 py-12">
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <div>
+      <h2 class="text-2xl font-semibold tracking-tight sm:text-[28px]">El mercado</h2>
+      <p class="mt-1 text-sm text-slate-500">Publicaciones activas de los últimos 45 días.</p>
+    </div>
+    <div class="inline-flex w-full gap-1 rounded-2xl bg-slate-100 p-1 sm:w-auto">
+      <button data-tab="necesidad" class="tab-btn">Necesidades <span id="cntNec" class="ml-1 rounded-full bg-slate-900/90 px-1.5 py-0.5 text-[10px] font-semibold text-white">0</span></button>
+      <button data-tab="tutor" class="tab-btn">Tutores <span id="cntTut" class="ml-1 rounded-full bg-slate-900/90 px-1.5 py-0.5 text-[10px] font-semibold text-white">0</span></button>
+    </div>
+  </div>
+  <div id="lista" class="mt-7 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+  <div id="paginacion"></div>
+</section>
+
+<section id="publicar" class="mx-auto max-w-6xl px-4 pb-12">
+  <div class="overflow-hidden rounded-[32px] border border-slate-200/80 bg-white shadow-card">
+    <div class="grid gap-8 p-7 sm:p-10 lg:grid-cols-2 lg:items-center">
+      <div>
+        <span class="inline-flex rounded-full bg-slate-100 px-3 py-1 text-[11px] font-medium text-slate-600">Gratis y en 40 segundos</span>
+        <h2 class="mt-4 text-2xl font-semibold tracking-tight sm:text-3xl">Publica lo que necesitas<br class="hidden sm:block"> o lo que enseñas.</h2>
+        <p class="mt-3 max-w-md text-[15px] leading-relaxed text-slate-500">Sin registros, sin contraseñas, sin comisiones. Tu anuncio se muestra durante <strong class="font-semibold text-slate-700">45 días</strong> y luego se retira solo.</p>
+        <div class="mt-6 flex flex-wrap gap-2.5">
+          <button onclick="abrirModal('necesidad')" class="rounded-2xl bg-slate-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-slate-800 active:scale-[.98]">Necesito ayuda</button>
+          <button onclick="abrirModal('tutor')" class="rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-medium text-slate-800 transition hover:border-slate-300 hover:bg-slate-50 active:scale-[.98]">Ofrezco tutoría</button>
+        </div>
+      </div>
+      <div class="grid gap-3 sm:grid-cols-2">
+        <div class="rounded-2xl border border-slate-100 bg-slate-50/70 p-4"><p class="text-2xl">🎯</p><p class="mt-2 text-sm font-semibold tracking-tight">Filtros inteligentes</p><p class="mt-1 text-xs leading-relaxed text-slate-500">Universidad + Carrera + Ramo.</p></div>
+        <div class="rounded-2xl border border-slate-100 bg-slate-50/70 p-4"><p class="text-2xl">💬</p><p class="mt-2 text-sm font-semibold tracking-tight">Contacto directo</p><p class="mt-1 text-xs leading-relaxed text-slate-500">Cada tarjeta abre WhatsApp.</p></div>
+        <div class="rounded-2xl border border-slate-100 bg-slate-50/70 p-4"><p class="text-2xl">🔐</p><p class="mt-2 text-sm font-semibold tracking-tight">Tú controlas tu anuncio</p><p class="mt-1 text-xs leading-relaxed text-slate-500">Con tu contraseña personal eliminas tu anuncio.</p></div>
+        <div class="rounded-2xl border border-slate-100 bg-slate-50/70 p-4"><p class="text-2xl">🕵️</p><p class="mt-2 text-sm font-semibold tracking-tight">100% anónimo</p><p class="mt-1 text-xs leading-relaxed text-slate-500">Sugerencias sin nombre ni correo.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="sugerencias" class="mx-auto max-w-6xl px-4 pb-12">
+  <div class="rounded-[32px] border border-slate-200/80 bg-white p-7 shadow-card sm:p-10">
+    <div class="grid gap-8 lg:grid-cols-2 lg:items-start">
+      <div>
+        <h2 class="text-2xl font-semibold tracking-tight">Buzón de sugerencias</h2>
+        <p class="mt-2 max-w-md text-[15px] leading-relaxed text-slate-500">¿Falta tu universidad, tu carrera o un ramo? Escríbenos. Es <strong class="font-semibold text-slate-700">totalmente anónimo</strong>.</p>
+        <p class="mt-4 inline-flex items-center gap-2 rounded-xl bg-slate-50 px-3 py-2 text-xs text-slate-500">📮 <span class="font-medium text-slate-700">ayudantiappoficial@gmail.com</span></p>
+      </div>
+      <form id="formSug" class="space-y-3">
+        <textarea id="sugTexto" required maxlength="1200" rows="5" placeholder="Cuéntanos qué mejorarías…" class="w-full resize-none rounded-2xl border border-slate-200 bg-slate-50/60 px-4 py-3.5 text-sm leading-relaxed text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-slate-900/5"></textarea>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <p class="text-[11px] text-slate-400">Anónimo · sin registro</p>
+          <button id="btnSug" type="submit" class="rounded-2xl bg-slate-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-slate-800 active:scale-[.98] disabled:opacity-50">Enviar sugerencia</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer class="border-t border-slate-200/70 bg-white/60">
+  <div class="mx-auto max-w-6xl px-4 py-10">
+    <div class="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+      <div>
+        <div class="flex items-center gap-2.5">
+          <svg width="32" height="32" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="2" y="2" width="60" height="60" rx="16" fill="#0f172a"/>
+            <path d="M18 20.5c0-1.38 1.12-2.5 2.5-2.5h8.5v25h-8.5A2.5 2.5 0 0 1 18 40.5v-20Z" fill="#e2e8f0"/>
+            <path d="M29 18h14.5c1.38 0 2.5 1.12 2.5 2.5v20c0 1.38-1.12 2.5-2.5 2.5H29V18Z" fill="#f8fafc"/>
+            <path d="M31.5 24h9.5M31.5 29h9.5M31.5 34h6.5" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M41 40.5l4.2-4.2a1.5 1.5 0 0 1 2.12 0l1.68 1.68a1.5 1.5 0 0 1 0 2.12L44.8 44.3l-4.6.9.8-4.7Z" fill="#34d399"/>
+            <path d="M43.2 42.7l3.1-3.1" stroke="#065f46" stroke-width="1.2" stroke-linecap="round"/>
+            <circle cx="49" cy="15" r="3.2" fill="#34d399"/>
+            <circle cx="49" cy="15" r="1.4" fill="#0f172a"/>
+          </svg>
+          <div>
+            <p class="text-sm font-semibold tracking-tight">AyudantiApp</p>
+            <p class="-mt-0.5 text-[11px] text-slate-500">Tu oferta justa</p>
+          </div>
+        </div>
+        <p class="mt-3 max-w-xs text-xs leading-relaxed text-slate-500">Mercado abierto y autónomo entre estudiantes.</p>
+      </div>
+      <div class="flex flex-wrap gap-x-8 gap-y-3 text-sm">
+        <a href="#mercado" class="text-slate-600 transition hover:text-slate-900">Mercado</a>
+        <a href="#publicar" class="text-slate-600 transition hover:text-slate-900">Publicar</a>
+        <a href="#sugerencias" class="text-slate-600 transition hover:text-slate-900">Sugerencias anónimas</a>
+      </div>
+    </div>
+    <div class="mt-8 flex flex-col gap-2 border-t border-slate-100 pt-6 text-[11px] text-slate-400 sm:flex-row sm:items-center sm:justify-between">
+      <p>© <span id="anio"></span> AyudantiApp · Hecho por y para estudiantes de Chile.</p>
+      <div class="flex items-center gap-4">
+        <p>Contacto: ayudantiappoficial@gmail.com</p>
+        <button onclick="abrirModalAdmin()" class="text-[11px] text-slate-300 transition hover:text-slate-600" title="Acceso moderador">· acceso moderador ·</button>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div id="adminBadge" class="fixed bottom-4 right-4 z-40 hidden">
+  <div class="flex items-center gap-2 rounded-2xl bg-amber-500 px-4 py-2.5 text-sm font-medium text-white shadow-pop">
+    <span>🛡️ Modo moderador</span>
+    <button onclick="desactivarAdmin()" class="rounded-lg bg-white/20 px-2.5 py-1 text-xs transition hover:bg-white/30">Salir</button>
+  </div>
+</div>
+
+<div id="modalAdmin" class="fixed inset-0 z-[70] hidden">
+  <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onclick="cerrarModalAdmin()"></div>
+  <div class="relative mx-auto mt-32 w-[min(400px,calc(100%-2rem))] rounded-3xl bg-white p-6 shadow-pop fade-up">
+    <div class="flex items-center justify-between">
+      <div>
+        <h3 class="text-base font-semibold tracking-tight">Acceso moderador</h3>
+        <p class="mt-0.5 text-[11px] text-slate-500">Solo para el administrador del sitio.</p>
+      </div>
+      <button onclick="cerrarModalAdmin()" class="grid h-8 w-8 place-items-center rounded-full text-slate-400 transition hover:bg-slate-100 hover:text-slate-700" aria-label="Cerrar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <input id="adminPass" type="password" placeholder="Clave secreta" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();validarClave();}" class="mt-5 w-full rounded-2xl border border-slate-200 bg-slate-50/60 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-slate-900/5" />
+    <p id="adminError" class="mt-2 hidden text-[12px] text-rose-600">Clave incorrecta. Intenta de nuevo.</p>
+    <div class="mt-4 flex gap-2">
+      <button onclick="cerrarModalAdmin()" class="flex-1 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50">Cancelar</button>
+      <button onclick="validarClave()" class="flex-1 rounded-2xl bg-slate-900 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-slate-800">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<div id="modalPassword" class="fixed inset-0 z-[75] hidden">
+  <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm"></div>
+  <div class="relative mx-auto mt-20 w-[min(480px,calc(100%-2rem))] rounded-[28px] bg-white p-6 shadow-pop fade-up sm:mt-24">
+    <div class="text-center">
+      <div class="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-emerald-50 text-2xl">🔐</div>
+      <h3 class="mt-4 text-lg font-semibold tracking-tight">¡Anuncio publicado!</h3>
+      <p class="mt-1 text-sm text-slate-500">Guarda esta contraseña en un lugar seguro.</p>
+    </div>
+    <div class="mt-5 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 px-5 py-5 text-center">
+      <p class="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-400">Tu contraseña personal</p>
+      <p id="passShown" class="mt-2 break-all font-mono text-2xl font-semibold tracking-wider text-slate-900">—</p>
+    </div>
+    <div class="mt-4 flex gap-2">
+      <button onclick="copiarPassword()" class="flex-1 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50">📋 Copiar</button>
+      <button onclick="cerrarModalPassword()" class="flex-1 rounded-2xl bg-slate-900 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-slate-800">Entendido</button>
+    </div>
+    <div class="mt-4 rounded-2xl bg-amber-50 p-4">
+      <p class="text-[12px] leading-relaxed text-amber-900">⚠️ <strong class="font-semibold">Importante:</strong> Solo tú sabrás esta contraseña. La necesitarás para <strong>eliminar tu anuncio</strong> cuando ya hayas conseguido tu ayudantía.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODAL ELIMINAR (con hint + mostrar contraseña) ===================== -->
+<div id="modalEliminar" class="fixed inset-0 z-[75] hidden">
+  <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onclick="cerrarModalEliminar()"></div>
+  <div class="relative mx-auto mt-32 w-[min(440px,calc(100%-2rem))] rounded-3xl bg-white p-6 shadow-pop fade-up">
+    <div class="flex items-center justify-between">
+      <div>
+        <h3 class="text-base font-semibold tracking-tight">Eliminar mi anuncio</h3>
+        <p class="mt-0.5 text-[11px] text-slate-500">Ingresa la contraseña de <strong>este</strong> anuncio.</p>
+      </div>
+      <button onclick="cerrarModalEliminar()" class="grid h-8 w-8 place-items-center rounded-full text-slate-400 transition hover:bg-slate-100 hover:text-slate-700" aria-label="Cerrar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="mt-4 rounded-2xl bg-slate-50 px-4 py-3">
+      <p id="delPostInfo" class="text-sm font-medium text-slate-700">—</p>
+    </div>
+    <p id="delHint" class="mt-2 hidden text-[11px] leading-relaxed text-amber-700"></p>
+    <div class="relative mt-3">
+      <input id="delPass" type="password" placeholder="Contraseña de este anuncio" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();confirmarEliminar();}" class="w-full rounded-2xl border border-slate-200 bg-slate-50/60 px-4 py-3 pr-12 text-sm outline-none transition placeholder:text-slate-400 focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-slate-900/5" />
+      <button type="button" onclick="toggleDelPass()" class="absolute right-2 top-1/2 -translate-y-1/2 grid h-8 w-8 place-items-center rounded-lg text-slate-400 transition hover:bg-slate-100" aria-label="Mostrar contraseña">👁</button>
+    </div>
+    <p id="delError" class="mt-2 hidden text-[12px] leading-relaxed text-rose-600">Contraseña incorrecta. Intenta de nuevo.</p>
+    <div class="mt-4 flex gap-2">
+      <button onclick="cerrarModalEliminar()" class="flex-1 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50">Cancelar</button>
+      <button onclick="confirmarEliminar()" class="flex-1 rounded-2xl bg-rose-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-rose-700">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal" class="fixed inset-0 z-50 hidden">
+  <div class="absolute inset-0 bg-slate-900/30 backdrop-blur-sm" onclick="cerrarModal()"></div>
+  <div class="relative mx-auto mt-6 w-[min(680px,calc(100%-1.5rem))] max-h-[88vh] overflow-y-auto rounded-[28px] bg-white shadow-pop fade-up sm:mt-10">
+    <div class="sticky top-0 z-10 flex items-center justify-between border-b border-slate-100 bg-white/90 px-6 py-4 backdrop-blur-xl">
+      <div>
+        <h3 id="modalTitulo" class="text-base font-semibold tracking-tight">Nueva publicación</h3>
+        <p class="text-[11px] text-slate-500">Gratis · activa por 45 días</p>
+      </div>
+      <button onclick="cerrarModal()" class="grid h-9 w-9 place-items-center rounded-full text-slate-400 transition hover:bg-slate-100 hover:text-slate-700" aria-label="Cerrar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <form id="formPub" class="space-y-5 px-6 py-6">
+      <div class="grid grid-cols-2 gap-2 rounded-2xl bg-slate-100 p-1">
+        <button type="button" data-modo="necesidad" class="modo-btn">Necesito ayuda</button>
+        <button type="button" data-modo="tutor" class="modo-btn">Ofrezco tutoría</button>
+      </div>
+      <div>
+        <label class="mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400" id="lblNombre">Tu nombre (opcional)</label>
+        <input id="pNombre" type="text" maxlength="40" placeholder="Ej: Camila" class="w-full rounded-2xl border border-slate-200 bg-slate-50/60 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-slate-900/5" />
+      </div>
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div class="relative sm:col-span-2">
+          <label class="mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">Universidad *</label>
+          <select id="pUni" required class="apple w-full rounded-2xl border border-slate-200 bg-slate-50/60 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-slate-900/5"></select>
+        </div>
+        <div class="relative">
+          <label class="mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">Carrera *</label>
+          <select id="pCarr" required class="apple w-full rounded-2xl border border-slate-200 bg-slate-50/60 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-slate-900/5"></select>
+        </div>
+        <div class="relative">
+          <label class="mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">Ramo / Materia *</label>
+          <select id="pRamo" required class="apple w-full rounded-2xl border border-slate-200 bg-slate-50/60 px-4 py-3 text-sm outline-none transition focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-slate-900/5"></select>
+        </div>
+      </div>
+      <div id="campoRamosExtra" class="hidden">
+        <label class="mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">Otros ramos que enseñas</label>
+        <input id="pRamosExtra" type="text" placeholder="Sepáralos con coma: Cálculo I, Álgebra, Física" class="w-full rounded-2xl border border-slate-200 bg-slate-50/60 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-slate-900/5" />
+      </div>
+      <div>
+        <label class="mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">Descripción * <span class="font-normal normal-case tracking-normal text-slate-400" id="descCount">0/500</span></label>
+        <textarea id="pDesc" required maxlength="500" rows="4" placeholder="Cuéntalo en 2 o 3 líneas…" class="w-full resize-none rounded-2xl border border-slate-200 bg-slate-50/60 px-4 py-3.5 text-sm leading-relaxed outline-none transition placeholder:text-slate-400 focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-slate-900/5"></textarea>
+      </div>
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div id="campoPresupuesto">
+          <label class="mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">Presupuesto (CLP) *</label>
+          <input id="pMonto" type="number" min="0" step="500" placeholder="8000" class="w-full rounded-2xl border border-slate-200 bg-slate-50/60 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-slate-900/5" />
+        </div>
+        <div id="campoTarifa" class="hidden">
+          <label class="mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">Tarifa por hora (CLP) *</label>
+          <input id="pTarifa" type="number" min="0" step="500" placeholder="10000" class="w-full rounded-2xl border border-slate-200 bg-slate-50/60 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-slate-900/5" />
+        </div>
+        <div class="sm:col-span-2">
+          <label class="mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">WhatsApp *</label>
+          <input id="pWa" type="tel" required placeholder="+56 9 1234 5678" class="w-full rounded-2xl border border-slate-200 bg-slate-50/60 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-slate-900/5" />
+          <p class="mt-1.5 text-[11px] text-slate-400">Solo se usará para que te contacten desde el anuncio.</p>
+        </div>
+      </div>
+      <div class="rounded-2xl border border-emerald-100 bg-emerald-50/60 p-4">
+        <label class="mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.12em] text-emerald-700" id="lblPass">Contraseña para eliminar tu anuncio *</label>
+        <input id="pPass" type="password" required minlength="4" autocomplete="new-password" placeholder="Crea una contraseña (mín. 4 caracteres)" class="w-full rounded-2xl border border-emerald-200 bg-white px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:ring-4 focus:ring-emerald-500/10" />
+        <p class="mt-2 text-[11px] leading-relaxed text-emerald-800">🔒 <strong class="font-semibold">Solo tú sabrás esta contraseña.</strong> Con ella podrás eliminar tu anuncio cuando ya hayas conseguido tu ayudantía.</p>
+      </div>
+      <div class="flex gap-3 rounded-2xl border border-sky-100 bg-sky-50/70 p-4">
+        <span class="text-lg leading-none">⏳</span>
+        <p class="text-[12px] leading-relaxed text-sky-900"><strong class="font-semibold">Tu anuncio estará activo por 45 días.</strong> Si ya lo lograste o expira, podrás volver a publicarlo gratis en segundos.</p>
+      </div>
+      <button id="btnSubmitPub" type="submit" class="w-full rounded-2xl bg-slate-900 px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-slate-800 active:scale-[.99]">Publicar gratis</button>
+      <p class="pb-2 text-center text-[11px] text-slate-400">Sin registro · sin comisiones · datos guardados en tu navegador</p>
+    </form>
+  </div>
+</div>
+
+<div id="toast" class="pointer-events-none fixed bottom-5 left-1/2 z-[80] hidden -translate-x-1/2">
+  <div class="toast-in pointer-events-auto flex items-center gap-2.5 rounded-2xl bg-slate-900 px-4 py-3 text-sm text-white shadow-pop">
+    <span id="toastIcon">✅</span><span id="toastMsg">Listo</span>
+  </div>
+</div>
+
+<script>
+/* ============================================================================
+   AYUDANTIAPP · Tu oferta justa
+   Fix de seguridad: contraseña por anuncio con salt + verificación estricta
+   ========================================================================== */
+
+const DIAS_VIGENCIA       = 45;
+const EXPIRA_MS           = DIAS_VIGENCIA * 24 * 60 * 60 * 1000;
+const POSTS_POR_PAGINA    = 12;
+const ADS_CADA_N_TARJETAS = 6;
+const FORMSPREE_ENDPOINT  = 'https://formspree.io/f/REEMPLAZA_TU_ID';
+const CORREO_SUGERENCIAS  = 'ayudantiappoficial@gmail.com';
+const ADMIN_PASS          = 'AyudantiApp2026*';
+
+const K = {
+  POSTS:    'ayudantiapp:posts:v1',
+  UNIS:     'ayudantiapp:unis:v1',
+  CARRERAS: 'ayudantiapp:carreras:v1',
+  RAMOS:    'ayudantiapp:ramos:v1',
+  SEED:     'ayudantiapp:seed:v1',
+  ADMIN:    'ayudantiapp:admin'
+};
+
+/* ------------------------- 1. UTILIDADES -------------------------------- */
+const $  = (id) => document.getElementById(id);
+const LS = {
+  get(k, def) { try { const v = JSON.parse(localStorage.getItem(k)); return v ?? def; } catch { return def; } },
+  set(k, v)   { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { console.warn('localStorage lleno', e); } }
+};
+const unicos = (arr) => [...new Set(arr)];
+const orden  = (a, b) => String(a).localeCompare(String(b), 'es');
+const esc    = (s) => String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const valor  = (sel) => (sel.value === '__OTRO__' ? '' : sel.value);
+const trimTxt = (s) => String(s ?? '').trim().replace(/\s+/g, ' ');
+
+function normalizarTel(t) {
+  let d = String(t || '').replace(/\D/g, '');
+  if (d.startsWith('0')) d = d.replace(/^0+/, '');
+  if (d.startsWith('56')) return d;
+  if (d.length === 9) return '56' + d;
+  if (d.length === 8) return '569' + d;
+  return d;
+}
+function fmtMonto(v) {
+  const n = Number(String(v ?? '').replace(/[^\d]/g, ''));
+  if (!n) return 'A convenir';
+  return new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }).format(n);
+}
+function diasRestantes(ts) { return Math.max(0, Math.ceil((EXPIRA_MS - (Date.now() - ts)) / 86400000)); }
+function simpleHash(str) {
+  let h = 5381;
+  for (let i = 0; i < str.length; i++) { h = ((h << 5) + h) + str.charCodeAt(i); h = h & h; }
+  return 'h' + Math.abs(h).toString(36);
+}
+function nuevoId(prefijo = 'p') { return prefijo + '_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8); }
+
+/* 🔐 Salt aleatorio (16 bytes) para cada anuncio */
+function generarSalt() {
+  try {
+    const arr = new Uint8Array(16);
+    crypto.getRandomValues(arr);
+    return Array.from(arr).map(b => b.toString(16).padStart(2, '0')).join('');
+  } catch {
+    return 's_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+  }
+}
+
+/* Hash con salt: dos contraseñas iguales producen hashes distintos en posts distintos */
+function hashConSal(password, salt) {
+  return simpleHash(String(salt) + '|' + String(password) + '|' + String(salt));
+}
+
+/* Verificación central: SIEMPRE exige que el post tenga passHash */
+function verificarPassword(entered, post) {
+  if (!post) return { ok: false, razon: 'no_existe' };
+  if (!post.passHash) return { ok: false, razon: 'sin_password' };
+  if (post.salt) {
+    return { ok: hashConSal(entered, post.salt) === post.passHash, razon: 'ok' };
+  }
+  // Compatibilidad con posts antiguos sin salt
+  return { ok: simpleHash(entered) === post.passHash, razon: 'ok' };
+}
+
+/* ------------------------- 2. CATÁLOGO ---------------------------------- */
+const CARRERAS = {
+  "Ingeniería Civil Informática": ["Cálculo I","Cálculo II","Álgebra Lineal","Programación","Estructuras de Datos","Bases de Datos","Redes de Computadores","Sistemas Operativos","Física I","Estadística","Ingeniería de Software","Inteligencia Artificial"],
+  "Ingeniería Civil Industrial": ["Cálculo I","Cálculo II","Álgebra Lineal","Física I","Estadística","Investigación de Operaciones","Microeconomía","Macroeconomía","Gestión de Operaciones","Contabilidad","Finanzas"],
+  "Ingeniería Civil Mecánica": ["Cálculo I","Cálculo II","Álgebra Lineal","Física I","Mecánica de Materiales","Termodinámica","Mecánica de Fluidos","Resistencia de Materiales","Dibujo Técnico"],
+  "Ingeniería Civil Eléctrica": ["Cálculo I","Álgebra Lineal","Física II","Circuitos Eléctricos","Electromagnetismo","Sistemas Digitales","Control Automático","Máquinas Eléctricas"],
+  "Ingeniería Civil en Obras Civiles": ["Cálculo I","Mecánica de Materiales","Análisis Estructural","Hormigón Armado","Topografía","Hidráulica","Mecánica de Suelos","Construcción"],
+  "Ingeniería Civil Química": ["Cálculo I","Química General","Química Orgánica","Fisicoquímica","Balances de Materia","Operaciones Unitarias","Termodinámica"],
+  "Ingeniería Comercial": ["Microeconomía","Macroeconomía","Contabilidad","Estadística","Marketing","Finanzas","Derecho Comercial","Cálculo","Administración"],
+  "Ingeniería en Construcción": ["Topografía","Materiales de Construcción","Presupuestos de Obra","Hormigón Armado","Instalaciones","Dibujo de Construcción"],
+  "Ingeniería en Informática": ["Programación","Bases de Datos","Redes","Desarrollo Web","Estructuras de Datos","Sistemas Operativos"],
+  "Ingeniería en Marketing": ["Marketing","Estadística","Comportamiento del Consumidor","Investigación de Mercados","Publicidad","Finanzas"],
+  "Ingeniería en Información y Control de Gestión": ["Contabilidad","Estadística","Bases de Datos","Sistemas de Información","Control de Gestión","Finanzas"],
+  "Ingeniería Ambiental": ["Química Ambiental","Cálculo I","Física I","Evaluación de Impacto Ambiental","Tratamiento de Aguas","Gestión Ambiental"],
+  "Arquitectura": ["Taller de Diseño","Historia de la Arquitectura","Dibujo Arquitectónico","Estructuras","Teoría de la Arquitectura","Urbanismo","Materiales"],
+  "Medicina": ["Anatomía","Fisiología","Bioquímica","Histología","Farmacología","Semiología","Microbiología","Patología","Salud Pública"],
+  "Enfermería": ["Anatomía","Fisiología","Cuidados Básicos de Enfermería","Farmacología","Salud Pública","Enfermería Médico-Quirúrgica","Bioquímica"],
+  "Kinesiología": ["Anatomía","Fisiología","Biomecánica","Kinesiología Musculoesquelética","Neuroanatomía","Rehabilitación","Fisiología del Ejercicio"],
+  "Odontología": ["Anatomía","Histología","Fisiología","Materiales Dentales","Operatoria Dental","Periodoncia","Endodoncia","Bioquímica"],
+  "Psicología": ["Psicología General","Estadística","Psicología del Desarrollo","Psicopatología","Psicoanálisis","Neuropsicología","Metodología de la Investigación","Psicología Social"],
+  "Derecho": ["Derecho Civil","Derecho Penal","Derecho Constitucional","Derecho Procesal","Derecho Comercial","Derecho Laboral","Historia del Derecho","Filosofía del Derecho"],
+  "Contador Auditor": ["Contabilidad I","Contabilidad II","Auditoría","Tributaria","Costos","Finanzas","Derecho Tributario","Estadística"],
+  "Administración de Empresas": ["Administración","Contabilidad","Marketing","Recursos Humanos","Finanzas","Microeconomía","Estadística"],
+  "Pedagogía en Educación Básica": ["Didáctica de la Matemática","Didáctica de la Lengua","Psicología del Aprendizaje","Currículum","Evaluación Educativa","Ciencias Naturales","Historia"],
+  "Pedagogía en Matemática": ["Cálculo I","Álgebra","Geometría","Didáctica de la Matemática","Estadística","Análisis Real"],
+  "Pedagogía en Historia y Geografía": ["Historia de Chile","Historia Universal","Geografía","Didáctica de la Historia","Formación Ciudadana","Historiografía"],
+  "Pedagogía en Inglés": ["English Grammar","Phonetics","Didáctica del Inglés","Literature","Linguistics","Second Language Acquisition","Oral Skills"],
+  "Educación Parvularia": ["Desarrollo Infantil","Didáctica","Juego y Aprendizaje","Currículum","Literatura Infantil"],
+  "Trabajo Social": ["Sociología","Políticas Sociales","Trabajo Social con Familias","Metodología de Intervención","Psicología Social","Derechos Humanos"],
+  "Periodismo": ["Redacción Periodística","Ética Periodística","Comunicación Audiovisual","Medios Digitales","Historia de la Comunicación","Fotografía"],
+  "Diseño Gráfico": ["Taller de Diseño","Tipografía","Ilustración","Diseño Digital","Fotografía","Teoría del Color","Semiótica"],
+  "Medicina Veterinaria": ["Anatomía Animal","Fisiología Animal","Farmacología Veterinaria","Semiología Veterinaria","Cirugía","Nutrición Animal","Microbiología"],
+  "Química y Farmacia": ["Química General","Química Orgánica","Farmacología","Farmacognosia","Fisiología","Bioquímica","Análisis Instrumental"],
+  "Bioquímica": ["Química General","Química Orgánica","Bioquímica","Biología Celular","Genética","Enzimología","Biología Molecular"],
+  "Tecnología Médica": ["Anatomía","Fisiología","Bioquímica","Hematología","Microbiología","Imagenología","Química Clínica"],
+  "Nutrición y Dietética": ["Nutrición Humana","Bioquímica","Fisiología","Dietoterapia","Evaluación Nutricional","Bromatología","Microbiología"],
+  "Fonoaudiología": ["Anatomía","Fisiología","Lingüística","Trastornos del Lenguaje","Audiología","Voz"],
+  "Terapia Ocupacional": ["Anatomía","Fisiología","Neurología","Rehabilitación","Ergonomía","Salud Mental"],
+  "Obstetricia": ["Anatomía","Fisiología","Obstetricia","Ginecología","Neonatología","Salud Pública"],
+  "Sociología": ["Sociología General","Estadística","Teoría Sociológica","Metodología de la Investigación","Sociología Política","Sociología Urbana"],
+  "Agronomía": ["Botánica","Fisiología Vegetal","Suelos","Fitopatología","Producción Vegetal","Riego","Entomología"]
+};
+
+const UNIVERSIDADES = {
+  "Universidad Técnica Federico Santa María (USM)": { region: "Valparaíso", carreras: ["Ingeniería Civil Informática","Ingeniería Civil Industrial","Ingeniería Civil Mecánica","Ingeniería Civil Eléctrica","Ingeniería Civil en Obras Civiles","Ingeniería Civil Química","Ingeniería en Construcción","Arquitectura","Ingeniería Comercial"] },
+  "Pontificia Universidad Católica de Valparaíso (PUCV)": { region: "Valparaíso", carreras: ["Ingeniería Civil Informática","Ingeniería Civil Industrial","Ingeniería Civil Mecánica","Ingeniería Civil Eléctrica","Ingeniería Civil en Obras Civiles","Arquitectura","Ingeniería Comercial","Derecho","Psicología","Contador Auditor","Pedagogía en Educación Básica","Pedagogía en Matemática","Pedagogía en Historia y Geografía","Pedagogía en Inglés","Educación Parvularia","Trabajo Social","Periodismo","Agronomía","Nutrición y Dietética","Fonoaudiología"] },
+  "Universidad de Valparaíso (UV)": { region: "Valparaíso", carreras: ["Medicina","Enfermería","Kinesiología","Odontología","Psicología","Derecho","Arquitectura","Ingeniería Civil Informática","Ingeniería Civil Industrial","Ingeniería Civil en Obras Civiles","Tecnología Médica","Nutrición y Dietética","Obstetricia","Fonoaudiología","Terapia Ocupacional","Bioquímica","Química y Farmacia","Trabajo Social","Periodismo","Diseño Gráfico","Sociología","Pedagogía en Matemática","Pedagogía en Historia y Geografía","Pedagogía en Inglés","Educación Parvularia","Ingeniería Comercial","Contador Auditor","Administración de Empresas"] },
+  "Universidad de Playa Ancha (UPLA)": { region: "Valparaíso", carreras: ["Pedagogía en Educación Básica","Pedagogía en Matemática","Pedagogía en Historia y Geografía","Pedagogía en Inglés","Educación Parvularia","Fonoaudiología","Psicología","Ingeniería Civil Industrial","Ingeniería Civil Informática","Trabajo Social","Diseño Gráfico","Sociología","Administración de Empresas"] },
+  "Universidad de Viña del Mar (UVM)": { region: "Valparaíso", carreras: ["Derecho","Psicología","Arquitectura","Ingeniería Civil Industrial","Ingeniería Civil Informática","Enfermería","Kinesiología","Odontología","Medicina Veterinaria","Diseño Gráfico","Periodismo","Pedagogía en Educación Básica","Pedagogía en Inglés","Trabajo Social","Ingeniería Comercial","Contador Auditor","Administración de Empresas"] },
+  "Universidad Andrés Bello (UNAB) · Viña del Mar": { region: "Valparaíso", carreras: ["Medicina","Derecho","Psicología","Ingeniería Civil Informática","Ingeniería Civil Industrial","Ingeniería Comercial","Enfermería","Kinesiología","Odontología","Arquitectura","Diseño Gráfico","Periodismo","Pedagogía en Educación Básica","Pedagogía en Inglés","Trabajo Social","Medicina Veterinaria","Nutrición y Dietética","Tecnología Médica","Fonoaudiología","Terapia Ocupacional","Obstetricia","Química y Farmacia","Bioquímica"] },
+  "Universidad Adolfo Ibáñez (UAI) · Viña del Mar": { region: "Valparaíso", carreras: ["Ingeniería Civil Industrial","Ingeniería Comercial","Derecho","Psicología","Diseño Gráfico","Arquitectura","Periodismo"] },
+  "Universidad Santo Tomás · Viña del Mar": { region: "Valparaíso", carreras: ["Enfermería","Kinesiología","Psicología","Derecho","Ingeniería Civil Industrial","Ingeniería Civil Informática","Odontología","Nutrición y Dietética","Tecnología Médica","Trabajo Social","Pedagogía en Educación Básica","Educación Parvularia","Diseño Gráfico","Periodismo","Administración de Empresas","Contador Auditor","Medicina Veterinaria","Fonoaudiología","Terapia Ocupacional","Obstetricia"] },
+  "Universidad de Las Américas (UDLA) · Viña del Mar": { region: "Valparaíso", carreras: ["Derecho","Psicología","Enfermería","Kinesiología","Odontología","Ingeniería Civil Industrial","Ingeniería Civil Informática","Arquitectura","Diseño Gráfico","Periodismo","Pedagogía en Educación Básica","Pedagogía en Inglés","Trabajo Social","Medicina Veterinaria","Nutrición y Dietética","Tecnología Médica","Administración de Empresas","Contador Auditor","Ingeniería Comercial"] },
+  "Duoc UC · Valparaíso / Viña del Mar": { region: "Valparaíso", carreras: ["Ingeniería en Construcción","Ingeniería en Informática","Ingeniería en Marketing","Diseño Gráfico","Administración de Empresas","Contador Auditor"] },
+  "INACAP · Valparaíso / Viña del Mar": { region: "Valparaíso", carreras: ["Ingeniería Civil Industrial","Ingeniería en Construcción","Ingeniería en Informática","Ingeniería en Marketing","Diseño Gráfico","Administración de Empresas","Contador Auditor"] },
+  "AIEP · Valparaíso / Viña del Mar": { region: "Valparaíso", carreras: ["Ingeniería en Construcción","Ingeniería en Informática","Ingeniería en Marketing","Diseño Gráfico","Administración de Empresas","Contador Auditor"] },
+  "Universidad de Chile": { region: "Metropolitana", carreras: ["Medicina","Derecho","Ingeniería Civil Informática","Ingeniería Civil Industrial","Ingeniería Civil Mecánica","Ingeniería Civil Eléctrica","Ingeniería Civil en Obras Civiles","Ingeniería Civil Química","Arquitectura","Psicología","Enfermería","Kinesiología","Odontología","Química y Farmacia","Bioquímica","Tecnología Médica","Nutrición y Dietética","Fonoaudiología","Terapia Ocupacional","Obstetricia","Sociología","Periodismo","Diseño Gráfico","Agronomía","Medicina Veterinaria","Pedagogía en Educación Básica","Pedagogía en Matemática","Pedagogía en Historia y Geografía","Pedagogía en Inglés","Educación Parvularia","Ingeniería Comercial","Contador Auditor","Trabajo Social","Ingeniería en Información y Control de Gestión","Ingeniería Ambiental"] },
+  "Pontificia Universidad Católica de Chile (UC)": { region: "Metropolitana", carreras: ["Medicina","Derecho","Ingeniería Civil Informática","Ingeniería Civil Industrial","Ingeniería Civil Mecánica","Ingeniería Civil Eléctrica","Ingeniería Civil en Obras Civiles","Ingeniería Civil Química","Arquitectura","Psicología","Enfermería","Kinesiología","Odontología","Química y Farmacia","Bioquímica","Sociología","Periodismo","Diseño Gráfico","Agronomía","Medicina Veterinaria","Pedagogía en Educación Básica","Pedagogía en Matemática","Pedagogía en Historia y Geografía","Pedagogía en Inglés","Educación Parvularia","Ingeniería Comercial","Contador Auditor","Trabajo Social","Ingeniería Ambiental","Fonoaudiología","Nutrición y Dietética","Terapia Ocupacional","Obstetricia","Tecnología Médica"] },
+  "Universidad de Santiago de Chile (USACH)": { region: "Metropolitana", carreras: ["Medicina","Derecho","Ingeniería Civil Informática","Ingeniería Civil Industrial","Ingeniería Civil Mecánica","Ingeniería Civil Eléctrica","Ingeniería Civil en Obras Civiles","Ingeniería Civil Química","Arquitectura","Psicología","Enfermería","Kinesiología","Química y Farmacia","Bioquímica","Tecnología Médica","Periodismo","Diseño Gráfico","Pedagogía en Educación Básica","Pedagogía en Matemática","Pedagogía en Historia y Geografía","Pedagogía en Inglés","Educación Parvularia","Ingeniería Comercial","Contador Auditor","Administración de Empresas","Ingeniería en Información y Control de Gestión","Ingeniería Ambiental","Trabajo Social","Sociología"] },
+  "Universidad Andrés Bello (UNAB) · Santiago": { region: "Metropolitana", carreras: ["Medicina","Derecho","Psicología","Ingeniería Civil Informática","Ingeniería Civil Industrial","Ingeniería Comercial","Enfermería","Kinesiología","Odontología","Arquitectura","Diseño Gráfico","Periodismo","Pedagogía en Educación Básica","Pedagogía en Inglés","Trabajo Social","Medicina Veterinaria","Nutrición y Dietética","Tecnología Médica","Fonoaudiología","Terapia Ocupacional","Obstetricia","Química y Farmacia","Bioquímica","Contador Auditor"] },
+  "Universidad Diego Portales (UDP)": { region: "Metropolitana", carreras: ["Derecho","Psicología","Arquitectura","Diseño Gráfico","Periodismo","Sociología","Ingeniería Civil Informática","Ingeniería Civil Industrial","Ingeniería Comercial","Contador Auditor","Administración de Empresas","Trabajo Social"] },
+  "Universidad Adolfo Ibáñez (UAI) · Santiago": { region: "Metropolitana", carreras: ["Ingeniería Civil Industrial","Ingeniería Comercial","Derecho","Psicología","Diseño Gráfico","Arquitectura","Periodismo"] },
+  "Universidad de los Andes": { region: "Metropolitana", carreras: ["Medicina","Derecho","Ingeniería Civil Industrial","Ingeniería Civil Informática","Ingeniería Comercial","Psicología","Arquitectura","Odontología","Enfermería","Kinesiología","Nutrición y Dietética","Diseño Gráfico","Periodismo"] },
+  "Universidad Alberto Hurtado": { region: "Metropolitana", carreras: ["Derecho","Psicología","Trabajo Social","Sociología","Periodismo","Pedagogía en Educación Básica","Pedagogía en Historia y Geografía","Pedagogía en Inglés","Educación Parvularia","Ingeniería Comercial","Contador Auditor","Administración de Empresas"] },
+  "Universidad Finis Terrae": { region: "Metropolitana", carreras: ["Medicina","Derecho","Odontología","Enfermería","Kinesiología","Psicología","Arquitectura","Diseño Gráfico","Ingeniería Civil Industrial","Ingeniería Comercial","Periodismo","Pedagogía en Educación Básica","Educación Parvularia","Nutrición y Dietética","Fonoaudiología","Terapia Ocupacional"] },
+  "Universidad Mayor": { region: "Metropolitana", carreras: ["Medicina","Derecho","Odontología","Enfermería","Kinesiología","Psicología","Arquitectura","Diseño Gráfico","Ingeniería Civil Industrial","Ingeniería Civil Informática","Ingeniería Comercial","Periodismo","Pedagogía en Educación Básica","Pedagogía en Inglés","Educación Parvularia","Medicina Veterinaria","Nutrición y Dietética","Tecnología Médica","Fonoaudiología","Terapia Ocupacional","Obstetricia","Agronomía","Ingeniería Ambiental","Administración de Empresas","Contador Auditor"] },
+  "Universidad Central de Chile": { region: "Metropolitana", carreras: ["Medicina","Derecho","Enfermería","Kinesiología","Psicología","Odontología","Arquitectura","Ingeniería Civil Industrial","Ingeniería Civil Informática","Ingeniería Comercial","Periodismo","Diseño Gráfico","Pedagogía en Educación Básica","Pedagogía en Inglés","Educación Parvularia","Trabajo Social","Nutrición y Dietética","Fonoaudiología","Terapia Ocupacional","Obstetricia","Medicina Veterinaria","Administración de Empresas","Contador Auditor"] },
+  "Universidad de Las Américas (UDLA) · Santiago": { region: "Metropolitana", carreras: ["Derecho","Psicología","Enfermería","Kinesiología","Odontología","Ingeniería Civil Industrial","Ingeniería Civil Informática","Arquitectura","Diseño Gráfico","Periodismo","Pedagogía en Educación Básica","Pedagogía en Inglés","Trabajo Social","Medicina Veterinaria","Nutrición y Dietética","Tecnología Médica","Administración de Empresas","Contador Auditor","Ingeniería Comercial"] },
+  "Universidad Autónoma de Chile · Santiago": { region: "Metropolitana", carreras: ["Medicina","Derecho","Enfermería","Kinesiología","Psicología","Odontología","Ingeniería Civil Industrial","Ingeniería Civil Informática","Ingeniería Comercial","Arquitectura","Diseño Gráfico","Periodismo","Trabajo Social","Nutrición y Dietética","Tecnología Médica","Fonoaudiología","Terapia Ocupacional","Obstetricia","Medicina Veterinaria","Pedagogía en Educación Básica","Educación Parvularia","Pedagogía en Inglés","Administración de Empresas","Contador Auditor"] },
+  "Universidad Tecnológica Metropolitana (UTEM)": { region: "Metropolitana", carreras: ["Ingeniería Civil Informática","Ingeniería Civil Industrial","Ingeniería Civil Mecánica","Ingeniería Civil Eléctrica","Ingeniería Civil en Obras Civiles","Ingeniería en Construcción","Arquitectura","Diseño Gráfico","Administración de Empresas","Contador Auditor","Ingeniería Comercial"] },
+  "Universidad Metropolitana de Ciencias de la Educación (UMCE)": { region: "Metropolitana", carreras: ["Pedagogía en Educación Básica","Pedagogía en Matemática","Pedagogía en Historia y Geografía","Pedagogía en Inglés","Educación Parvularia"] },
+  "Universidad Católica Silva Henríquez (UCSH)": { region: "Metropolitana", carreras: ["Pedagogía en Educación Básica","Pedagogía en Matemática","Pedagogía en Historia y Geografía","Pedagogía en Inglés","Educación Parvularia","Trabajo Social","Psicología","Ingeniería Comercial","Contador Auditor","Administración de Empresas","Derecho"] },
+  "Universidad Academia de Humanismo Cristiano": { region: "Metropolitana", carreras: ["Derecho","Psicología","Trabajo Social","Sociología","Periodismo","Pedagogía en Educación Básica","Pedagogía en Historia y Geografía","Educación Parvularia","Administración de Empresas"] },
+  "Duoc UC · Santiago": { region: "Metropolitana", carreras: ["Ingeniería en Construcción","Ingeniería en Informática","Ingeniería en Marketing","Diseño Gráfico","Administración de Empresas","Contador Auditor"] },
+  "INACAP · Santiago": { region: "Metropolitana", carreras: ["Ingeniería Civil Industrial","Ingeniería en Construcción","Ingeniería en Informática","Ingeniería en Marketing","Diseño Gráfico","Administración de Empresas","Contador Auditor"] },
+  "AIEP · Santiago": { region: "Metropolitana", carreras: ["Ingeniería en Construcción","Ingeniería en Informática","Ingeniería en Marketing","Diseño Gráfico","Administración de Empresas","Contador Auditor"] },
+  "Universidad de Talca (UTAL)": { region: "Maule", carreras: ["Medicina","Derecho","Ingeniería Civil Informática","Ingeniería Civil Industrial","Ingeniería Civil Mecánica","Ingeniería Civil en Obras Civiles","Ingeniería Civil Química","Arquitectura","Psicología","Enfermería","Kinesiología","Odontología","Química y Farmacia","Bioquímica","Tecnología Médica","Nutrición y Dietética","Fonoaudiología","Terapia Ocupacional","Obstetricia","Ingeniería Comercial","Contador Auditor","Administración de Empresas","Pedagogía en Educación Básica","Pedagogía en Matemática","Pedagogía en Historia y Geografía","Pedagogía en Inglés","Educación Parvularia","Agronomía","Medicina Veterinaria","Ingeniería Ambiental","Trabajo Social","Diseño Gráfico","Periodismo","Ingeniería en Información y Control de Gestión"] },
+  "Universidad Católica del Maule (UCM)": { region: "Maule", carreras: ["Medicina","Derecho","Enfermería","Kinesiología","Psicología","Odontología","Ingeniería Civil Industrial","Ingeniería Civil Informática","Ingeniería Comercial","Contador Auditor","Pedagogía en Educación Básica","Pedagogía en Matemática","Pedagogía en Historia y Geografía","Pedagogía en Inglés","Educación Parvularia","Trabajo Social","Nutrición y Dietética","Fonoaudiología","Terapia Ocupacional","Obstetricia","Agronomía","Medicina Veterinaria","Administración de Empresas","Diseño Gráfico"] },
+  "Universidad Autónoma de Chile · Talca": { region: "Maule", carreras: ["Derecho","Psicología","Enfermería","Kinesiología","Ingeniería Civil Industrial","Ingeniería Civil Informática","Ingeniería Comercial","Odontología","Nutrición y Dietética","Tecnología Médica","Terapia Ocupacional","Obstetricia","Medicina Veterinaria","Pedagogía en Educación Básica","Educación Parvularia","Administración de Empresas","Contador Auditor","Trabajo Social"] },
+  "Universidad Santo Tomás · Talca": { region: "Maule", carreras: ["Enfermería","Kinesiología","Psicología","Derecho","Ingeniería Civil Industrial","Ingeniería Civil Informática","Odontología","Nutrición y Dietética","Tecnología Médica","Trabajo Social","Pedagogía en Educación Básica","Educación Parvularia","Diseño Gráfico","Periodismo","Administración de Empresas","Contador Auditor","Medicina Veterinaria","Fonoaudiología","Terapia Ocupacional","Obstetricia"] },
+  "INACAP · Talca": { region: "Maule", carreras: ["Ingeniería Civil Industrial","Ingeniería en Construcción","Ingeniería en Informática","Ingeniería en Marketing","Diseño Gráfico","Administración de Empresas","Contador Auditor"] },
+  "AIEP · Talca": { region: "Maule", carreras: ["Ingeniería en Construcción","Ingeniería en Informática","Ingeniería en Marketing","Diseño Gráfico","Administración de Empresas","Contador Auditor"] }
+};
+
+const RAMOS_GENERALES = ["Cálculo I","Cálculo II","Álgebra Lineal","Física I","Física II","Química General","Estadística","Programación","Biología Celular","Anatomía","Histología","Contabilidad","Microeconomía","Macroeconomía","Derecho Civil","Psicología General","Inglés","Historia de Chile","Metodología de la Investigación"];
+
+/* ------------------- 3. ACCESORES AL CATÁLOGO --------------------------- */
+function opcionesUniversidades() { return unicos([...Object.keys(UNIVERSIDADES), ...LS.get(K.UNIS, [])]).sort(orden); }
+function todasLasCarreras() { return unicos([...Object.keys(CARRERAS), ...LS.get(K.CARRERAS, [])]).sort(orden); }
+function carrerasDeUni(uni) {
+  const custom = LS.get(K.CARRERAS, []);
+  if (!uni) return todasLasCarreras();
+  const info = UNIVERSIDADES[uni];
+  if (!info) return todasLasCarreras();
+  return unicos([...info.carreras, ...custom]).sort(orden);
+}
+function ramosDeCarrera(carrera) {
+  const custom = LS.get(K.RAMOS, {});
+  if (!carrera) return unicos([...RAMOS_GENERALES, ...Object.values(custom).flat()]).sort(orden);
+  const base = CARRERAS[carrera] || [];
+  return unicos([...base, ...(custom[carrera] || [])]).sort(orden);
+}
+function asegurarCatalogos(uni, carrera, ramo) {
+  if (uni && !UNIVERSIDADES[uni]) {
+    const arr = LS.get(K.UNIS, []);
+    if (!arr.some(x => x.toLowerCase() === uni.toLowerCase())) { arr.push(uni); LS.set(K.UNIS, arr); }
+  }
+  if (carrera && !CARRERAS[carrera]) {
+    const arr = LS.get(K.CARRERAS, []);
+    if (!arr.some(x => x.toLowerCase() === carrera.toLowerCase())) { arr.push(carrera); LS.set(K.CARRERAS, arr); }
+  }
+  if (ramo && carrera) {
+    const map = LS.get(K.RAMOS, {});
+    const lista = map[carrera] || [];
+    if (!lista.includes(ramo) && !(CARRERAS[carrera] || []).includes(ramo)) { map[carrera] = [...lista, ramo]; LS.set(K.RAMOS, map); }
+  }
+}
+
+/* ------------------- 4. SELECTS EN CASCADA + "OTRO" --------------------- */
+function fillSelect(sel, valores, placeholder) {
+  const prev = sel.value;
+  sel.innerHTML = '';
+  sel.appendChild(new Option(placeholder, ''));
+  valores.forEach(v => sel.appendChild(new Option(v, v)));
+  sel.appendChild(new Option('➕ Otro (escribir manualmente)', '__OTRO__'));
+  if ([...sel.options].some(o => o.value === prev)) sel.value = prev;
+}
+function crearCajaOtro(sel, placeholder, onAdd) {
+  const box = document.createElement('div');
+  box.style.display = 'none';
+  box.className = 'mt-2 flex gap-2';
+  const inp = document.createElement('input');
+  inp.type = 'text'; inp.placeholder = placeholder;
+  inp.className = 'flex-1 rounded-xl border border-slate-200 bg-white px-3 py-2 text-[13px] outline-none transition placeholder:text-slate-400 focus:border-slate-300 focus:ring-4 focus:ring-slate-900/5';
+  const btn = document.createElement('button');
+  btn.type = 'button'; btn.textContent = 'Agregar';
+  btn.className = 'shrink-0 rounded-xl bg-slate-900 px-3.5 py-2 text-[13px] font-medium text-white transition hover:bg-slate-800';
+  box.append(inp, btn);
+  sel.insertAdjacentElement('afterend', box);
+  function confirmar() {
+    const v = inp.value.trim();
+    if (!v) { inp.focus(); return; }
+    onAdd(v); inp.value = ''; box.style.display = 'none';
+  }
+  btn.addEventListener('click', confirmar);
+  inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); confirmar(); } });
+  return { mostrar() { box.style.display = 'flex'; inp.focus(); }, ocultar() { box.style.display = 'none'; inp.value = ''; } };
+}
+
+function initCascada(uniId, carrId, ramoId, onChange) {
+  const u = $(uniId), c = $(carrId), r = $(ramoId);
+  const cb = typeof onChange === 'function' ? onChange : () => {};
+  const boxU = crearCajaOtro(u, 'Nombre exacto de la universidad', agregarUniversidad);
+  const boxC = crearCajaOtro(c, 'Nombre exacto de la carrera', agregarCarrera);
+  const boxR = crearCajaOtro(r, 'Nombre exacto del ramo', agregarRamo);
+
+  function renderUnis()     { fillSelect(u, opcionesUniversidades(), 'Todas las universidades'); }
+  function renderCarreras() { fillSelect(c, carrerasDeUni(valor(u)), 'Todas las carreras'); }
+  function renderRamos()    { fillSelect(r, ramosDeCarrera(valor(c)), 'Todos los ramos'); }
+
+  function agregarUniversidad(v) {
+    const arr = LS.get(K.UNIS, []);
+    if (!arr.some(x => x.toLowerCase() === v.toLowerCase())) arr.push(v);
+    LS.set(K.UNIS, arr); renderUnis(); u.value = v; renderCarreras(); renderRamos(); cb();
+  }
+  function agregarCarrera(v) {
+    const arr = LS.get(K.CARRERAS, []);
+    if (!arr.some(x => x.toLowerCase() === v.toLowerCase())) arr.push(v);
+    LS.set(K.CARRERAS, arr); renderCarreras(); c.value = v; renderRamos(); cb();
+  }
+  function agregarRamo(v) {
+    const map = LS.get(K.RAMOS, {});
+    const key = valor(c) || 'General';
+    map[key] = unicos([...(map[key] || []), v]);
+    LS.set(K.RAMOS, map); renderRamos(); r.value = v; cb();
+  }
+  u.addEventListener('change', () => {
+    if (u.value === '__OTRO__') boxU.mostrar(); else boxU.ocultar();
+    renderCarreras(); renderRamos(); cb();
+  });
+  c.addEventListener('change', () => {
+    if (c.value === '__OTRO__') boxC.mostrar(); else boxC.ocultar();
+    renderRamos(); cb();
+  });
+  r.addEventListener('change', () => {
+    if (r.value === '__OTRO__') boxR.mostrar(); else boxR.ocultar();
+    cb();
+  });
+  renderUnis(); renderCarreras(); renderRamos();
+  return {
+    reset() {
+      u.value = ''; boxU.ocultar(); renderCarreras();
+      c.value = ''; boxC.ocultar(); renderRamos();
+      r.value = ''; boxR.ocultar(); cb();
+    },
+    refresh() { renderUnis(); renderCarreras(); renderRamos(); },
+    setValores(uni, carrera, ramo) {
+      asegurarCatalogos(uni, carrera, ramo);
+      fillSelect(u, opcionesUniversidades(), 'Todas las universidades');
+      u.value = uni || ''; boxU.ocultar();
+      fillSelect(c, carrerasDeUni(uni), 'Todas las carreras');
+      c.value = carrera || ''; boxC.ocultar();
+      fillSelect(r, ramosDeCarrera(carrera), 'Todos los ramos');
+      r.value = ramo || ''; boxR.ocultar();
+      cb();
+    }
+  };
+}
+
+/* ------------------- 5. PUBLICACIONES (localStorage) -------------------- */
+function cargarPosts() {
+  const posts = LS.get(K.POSTS, []);
+  const ahora = Date.now();
+  const vigentes = posts.filter(p => (ahora - Number(p.creado)) < EXPIRA_MS);
+  if (vigentes.length !== posts.length) {
+    LS.set(K.POSTS, vigentes);
+    const eliminados = posts.length - vigentes.length;
+    setTimeout(() => toast(`🧹 ${eliminados} anuncio(s) de más de ${DIAS_VIGENCIA} días fueron retirados automáticamente.`), 900);
+  }
+  return vigentes;
+}
+function guardarPost(post) { const posts = cargarPosts(); posts.push(post); LS.set(K.POSTS, posts); }
+
+/* 🔧 MIGRACIÓN: asigna IDs + passHash+salt a anuncios antiguos sin contraseña.
+   Con esto, ningún post queda sin protección. */
+function migrarPosts() {
+  const posts = LS.get(K.POSTS, []);
+  if (!Array.isArray(posts)) return;
+  let cambios = 0;
+  posts.forEach((p, i) => {
+    if (!p.id) {
+      p.id = 'p_mig_' + Date.now() + '_' + i + '_' + Math.random().toString(36).slice(2, 6);
+      cambios++;
+    }
+    if (!p.passHash) {
+      // Post legacy sin contraseña: se le asigna una contraseña aleatoria inexpugnable.
+      // Solo el admin podrá eliminarlo.
+      const salt = generarSalt();
+      p.salt = salt;
+      p.passHash = hashConSal('__LEGACY_NO_RESET__' + generarSalt(), salt);
+      cambios++;
+    }
+  });
+  if (cambios > 0) {
+    LS.set(K.POSTS, posts);
+    console.info(`[AyudantiApp] ${cambios} publicación(es) migrada(s) con contraseña.`);
+  }
+}
+
+/* Datos de ejemplo — ahora CON salt por anuncio para máxima seguridad */
+function sembrarDemo() {
+  if (LS.get(K.SEED, false)) return;
+  const hoy = Date.now();
+  const saltDemo = 'demo_salt_shared_v1'; // Un salt común para los demos (todos usan "demo")
+  const passDemo = hashConSal('demo', saltDemo);
+  const demo = [
+    { id: 'p_demo_1', salt: saltDemo, tipo:'necesidad', nombre:'Camila', uni:'Pontificia Universidad Católica de Valparaíso (PUCV)', carrera:'Ingeniería Civil Industrial', ramo:'Cálculo II', monto:'8000', whatsapp:'+56912345678', creado: hoy - 1*86400000, passHash: passDemo, descripcion:'Necesito reforzar integrales impropias y series antes del certamen del viernes. Ideal alguien que haya pasado el ramo con la profe Rojas.' },
+    { id: 'p_demo_2', salt: saltDemo, tipo:'tutor', nombre:'Matías', uni:'Universidad Técnica Federico Santa María (USM)', carrera:'Ingeniería Civil Informática', ramo:'Estructuras de Datos', monto:'12000', whatsapp:'+56987654321', creado: hoy - 3*86400000, passHash: passDemo, descripcion:'Ayudo con listas enlazadas, árboles y complejidad algorítmica. Clases online por Meet con ejercicios en vivo y material propio.', ramosExtra:'Programación, Bases de Datos' },
+    { id: 'p_demo_3', salt: saltDemo, tipo:'necesidad', nombre:'Ignacio', uni:'Universidad de Chile', carrera:'Medicina', ramo:'Farmacología', monto:'10000', whatsapp:'+56911223344', creado: hoy - 5*86400000, passHash: passDemo, descripcion:'Busco repaso de farmacocinética y antibióticos antes del examen de grado. Puedo pagar por sesiones de 90 minutos.' },
+    { id: 'p_demo_4', salt: saltDemo, tipo:'tutor', nombre:'Fernanda', uni:'Universidad de Talca (UTAL)', carrera:'Derecho', ramo:'Derecho Civil', monto:'9000', whatsapp:'+56922334455', creado: hoy - 7*86400000, passHash: passDemo, descripcion:'Profesora particular de Derecho Civil (obligaciones y contratos). Preparo material según la malla y los apuntes de tu sección.', ramosExtra:'Derecho Comercial' },
+    { id: 'p_demo_5', salt: saltDemo, tipo:'necesidad', nombre:'Vicente', uni:'Universidad de Playa Ancha (UPLA)', carrera:'Pedagogía en Matemática', ramo:'Álgebra Lineal', monto:'7000', whatsapp:'+56933445566', creado: hoy - 10*86400000, passHash: passDemo, descripcion:'Se me complica con transformaciones lineales y valores propios. Busco alguien paciente para clases presenciales en Valparaíso.' },
+    { id: 'p_demo_6', salt: saltDemo, tipo:'tutor', nombre:'Antonia', uni:'Pontificia Universidad Católica de Chile (UC)', carrera:'Psicología', ramo:'Estadística', monto:'15000', whatsapp:'+56944556677', creado: hoy - 12*86400000, passHash: passDemo, descripcion:'Clases de estadística aplicada a psicología: descriptiva, inferencia y uso de SPSS. Enfoque práctico con bases de datos reales.', ramosExtra:'Metodología de la Investigación' },
+    { id: 'p_demo_7', salt: saltDemo, tipo:'necesidad', nombre:'Javiera', uni:'Universidad de Santiago de Chile (USACH)', carrera:'Ingeniería Civil Industrial', ramo:'Investigación de Operaciones', monto:'9000', whatsapp:'+56955667788', creado: hoy - 14*86400000, passHash: passDemo, descripcion:'Necesito ayuda con programación lineal y método simplex antes del certamen 2. Presencial en la USACH o por Zoom.' },
+    { id: 'p_demo_8', salt: saltDemo, tipo:'tutor', nombre:'Diego', uni:'Universidad de Valparaíso (UV)', carrera:'Kinesiología', ramo:'Anatomía', monto:'11000', whatsapp:'+56966778899', creado: hoy - 15*86400000, passHash: passDemo, descripcion:'Ayudo con anatomía humana: sistema músculo-esquelético, neuroanatomía y preparación de certámenes prácticos con modelos.', ramosExtra:'Fisiología, Biomecánica' },
+    { id: 'p_demo_9', salt: saltDemo, tipo:'necesidad', nombre:'Martina', uni:'Universidad de Playa Ancha (UPLA)', carrera:'Trabajo Social', ramo:'Metodología de Intervención', monto:'6000', whatsapp:'+56977889900', creado: hoy - 16*86400000, passHash: passDemo, descripcion:'Busco alguien que me oriente con el diseño de un proyecto de intervención comunitario. Ideal con experiencia en trabajo territorial.' },
+    { id: 'p_demo_10', salt: saltDemo, tipo:'tutor', nombre:'Sebastián', uni:'Universidad Técnica Federico Santa María (USM)', carrera:'Ingeniería Civil Mecánica', ramo:'Termodinámica', monto:'13000', whatsapp:'+56988990011', creado: hoy - 18*86400000, passHash: passDemo, descripcion:'Clases de termodinámica aplicada: ciclos, entropía y máquinas térmicas. Preparo guías según tu profesor.', ramosExtra:'Mecánica de Fluidos' }
+  ];
+  LS.set(K.POSTS, demo);
+  LS.set(K.SEED, true);
+}
+
+/* ------------------- 6. MODO ADMINISTRADOR ------------------------------ */
+let esAdmin = localStorage.getItem(K.ADMIN) === '1';
+function abrirModalAdmin() {
+  $('modalAdmin').classList.remove('hidden');
+  $('adminError').classList.add('hidden');
+  $('adminPass').value = '';
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => $('adminPass').focus(), 60);
+}
+function cerrarModalAdmin() { $('modalAdmin').classList.add('hidden'); document.body.style.overflow = ''; }
+function validarClave() {
+  const v = $('adminPass').value;
+  if (v === ADMIN_PASS) {
+    esAdmin = true; localStorage.setItem(K.ADMIN, '1');
+    cerrarModalAdmin(); aplicarAdminUI(); toast('Modo moderador activado', '🛡️');
+  } else {
+    $('adminError').classList.remove('hidden'); $('adminPass').value = ''; $('adminPass').focus();
+  }
+}
+function desactivarAdmin() { esAdmin = false; localStorage.removeItem(K.ADMIN); aplicarAdminUI(); toast('Modo moderador desactivado', '👋'); }
+function aplicarAdminUI() { $('adminBadge').classList.toggle('hidden', !esAdmin); render(); }
+function eliminarPostAdmin(id) {
+  if (!esAdmin) return;
+  if (!id) { toast('No se pudo identificar el anuncio', '⚠️'); return; }
+  if (!confirm('¿Eliminar esta publicación como moderador? Esta acción no se puede deshacer.')) return;
+  const antes = cargarPosts().length;
+  LS.set(K.POSTS, cargarPosts().filter(p => p.id !== id));
+  render();
+  if (cargarPosts().length < antes) toast('Publicación eliminada', '🗑️');
+}
+function editarPost(id) {
+  if (!esAdmin) return;
+  try {
+    const post = cargarPosts().find(p => p.id === id);
+    if (!post) { toast('No se encontró el anuncio. Recargando…', '⚠️'); migrarPosts(); render(); return; }
+    abrirModal(post.tipo, id);
+  } catch (err) { console.error(err); toast('Error al abrir el editor.', '❌'); }
+}
+
+/* ------------------- 6b. ELIMINAR CON CONTRASEÑA (autor) ---------------- */
+let deleteTargetId = null;
+
+function abrirModalEliminar(id) {
+  const post = cargarPosts().find(p => p.id === id);
+  if (!post) return;
+  deleteTargetId = id;
+  $('delPostInfo').textContent = `${post.ramo} · ${post.carrera}`;
+
+  // Hint según tipo de anuncio
+  const hint = $('delHint');
+  if (String(id).startsWith('p_demo_')) {
+    hint.textContent = '💡 Este es un anuncio de ejemplo. Su contraseña es: demo';
+    hint.classList.remove('hidden');
+  } else if (!post.passHash) {
+    hint.textContent = '⚠️ Esta publicación no tiene contraseña registrada. Contacta a ayudantiappoficial@gmail.com si es tuya.';
+    hint.classList.remove('hidden');
+  } else {
+    hint.classList.add('hidden');
+    hint.textContent = '';
+  }
+
+  $('delPass').value = '';
+  $('delPass').type = 'password';
+  $('delError').classList.add('hidden');
+  $('modalEliminar').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => $('delPass').focus(), 60);
+}
+function cerrarModalEliminar() { $('modalEliminar').classList.add('hidden'); document.body.style.overflow = ''; deleteTargetId = null; }
+function toggleDelPass() {
+  const inp = $('delPass');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  inp.focus();
+}
+function confirmarEliminar() {
+  if (!deleteTargetId) return;
+  const post = cargarPosts().find(p => p.id === deleteTargetId);
+  if (!post) { cerrarModalEliminar(); return; }
+
+  const entered = $('delPass').value;
+  const check = verificarPassword(entered, post);
+
+  if (check.ok) {
+    LS.set(K.POSTS, cargarPosts().filter(p => p.id !== deleteTargetId));
+    cerrarModalEliminar();
+    render();
+    toast('Tu anuncio fue eliminado', '🗑️');
+  } else if (check.razon === 'sin_password') {
+    $('delError').textContent = 'Esta publicación es antigua y no tiene contraseña. Contacta a ayudantiappoficial@gmail.com si es tuya.';
+    $('delError').classList.remove('hidden');
+  } else {
+    $('delError').textContent = 'Contraseña incorrecta. Recuerda que debe ser la de ESTE anuncio específico.';
+    $('delError').classList.remove('hidden');
+    $('delPass').value = '';
+    $('delPass').focus();
+  }
+}
+
+/* ------------------- 6c. RECORDATORIO DE CONTRASEÑA --------------------- */
+function mostrarModalPassword(password) {
+  $('passShown').textContent = password;
+  $('modalPassword').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+function cerrarModalPassword() { $('modalPassword').classList.add('hidden'); document.body.style.overflow = ''; $('passShown').textContent = '—'; }
+function copiarPassword() {
+  const pwd = $('passShown').textContent;
+  if (!pwd || pwd === '—') return;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(pwd).then(() => toast('Contraseña copiada', '📋')).catch(() => toast('No se pudo copiar.', '⚠️'));
+  } else { toast('Tu navegador no permite copiar automáticamente.', '⚠️'); }
+}
+
+/* ------------------- 7. RENDER + PAGINACIÓN + ADS ----------------------- */
+let tabActual = 'necesidad';
+let paginaActual = 1;
+let cascadaFiltros = null;
+let editandoId = null;
+
+const TAB_ON  = 'flex-1 rounded-xl bg-white px-4 py-2 text-sm font-medium text-slate-900 shadow-sm transition';
+const TAB_OFF = 'flex-1 rounded-xl px-4 py-2 text-sm font-medium text-slate-500 transition hover:text-slate-700';
+
+function adSlot() {
+  const div = document.createElement('div');
+  div.className = 'col-span-full';
+  div.innerHTML = `
+    <div class="rounded-3xl border border-dashed border-slate-200 bg-white/60 p-4">
+      <p class="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">Publicidad</p>
+      <div class="grid h-24 place-items-center rounded-2xl text-center text-xs text-slate-400 sm:h-28">Espacio reservado para Google AdSense</div>
+    </div>`;
+  return div;
+}
+
+function crearCard(p) {
+  const esTutor = p.tipo === 'tutor';
+  const art = document.createElement('article');
+  art.className = 'flex flex-col rounded-3xl border border-slate-200/70 bg-white p-5 shadow-card transition duration-200 hover:-translate-y-0.5 hover:shadow-pop';
+  const dias  = diasRestantes(p.creado);
+  const chips = String(p.ramosExtra || '').split(',').map(s => s.trim()).filter(Boolean).slice(0, 4);
+  const waMsg = encodeURIComponent(`Hola${p.nombre ? ', ' + p.nombre : ''}. Te escribo desde AyudantiApp por tu publicación de "${p.ramo}" (${p.carrera} · ${p.uni}). ¿Sigue disponible?`);
+  const wa = `https://wa.me/${normalizarTel(p.whatsapp)}?text=${waMsg}`;
+  const idSafe = String(p.id || '').replace(/[^a-zA-Z0-9_-]/g, '');
+
+  art.innerHTML = `
+    <div class="flex items-center justify-between gap-3">
+      <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium ${esTutor ? 'bg-emerald-50 text-emerald-700' : 'bg-sky-50 text-sky-700'}">
+        <span class="h-1.5 w-1.5 rounded-full ${esTutor ? 'bg-emerald-500' : 'bg-sky-500'}"></span>
+        ${esTutor ? 'Tutor disponible' : 'Necesita ayuda'}
+      </span>
+      <span class="text-[11px] text-slate-400" title="Días de vigencia restantes">${dias} d</span>
+    </div>
+    <h3 class="mt-3 text-[15px] font-semibold leading-snug tracking-tight text-slate-900">${esc(p.ramo)}</h3>
+    <p class="mt-0.5 text-xs text-slate-500">${esc(p.carrera)} · ${esc(p.uni)}</p>
+    ${esTutor && p.nombre ? `<p class="mt-2 text-xs font-medium text-slate-700">👤 ${esc(p.nombre)}</p>` : ''}
+    <p class="mt-2.5 text-sm leading-relaxed text-slate-600">${esc(p.descripcion)}</p>
+    ${chips.length ? `<div class="mt-3 flex flex-wrap gap-1.5">${chips.map(ch => `<span class="rounded-lg bg-slate-100 px-2 py-1 text-[11px] text-slate-600">${esc(ch)}</span>`).join('')}</div>` : ''}
+    <div class="mt-auto pt-4">
+      <div class="flex items-end justify-between gap-3 border-t border-slate-100 pt-4">
+        <div>
+          <p class="text-[10px] uppercase tracking-[0.14em] text-slate-400">${esTutor ? 'Tarifa por hora' : 'Presupuesto'}</p>
+          <p class="text-lg font-semibold tracking-tight text-slate-900">${fmtMonto(p.monto)}</p>
+        </div>
+        <a href="${wa}" target="_blank" rel="noopener noreferrer"
+           class="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-slate-800 active:scale-[.98]">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.6-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.09 1.75-.72 2-1.41.25-.7.25-1.29.17-1.42-.07-.12-.27-.2-.57-.35zM12.05 2C6.55 2 2.1 6.45 2.1 11.95c0 1.76.46 3.42 1.27 4.86L2 22l5.33-1.34a9.9 9.9 0 0 0 4.72 1.2c5.5 0 9.95-4.45 9.95-9.95S17.55 2 12.05 2z"/></svg>
+          WhatsApp
+        </a>
+      </div>
+      <button onclick="abrirModalEliminar('${idSafe}')" class="mt-3 w-full text-center text-[11px] text-slate-400 underline-offset-4 transition hover:text-rose-600 hover:underline">¿Ya conseguiste tu ayudantía? Elimina tu anuncio</button>
+    </div>`;
+
+  if (esAdmin) {
+    const tb = document.createElement('div');
+    tb.className = 'mb-3 flex items-center gap-1.5 border-b border-amber-100 pb-2.5';
+    tb.innerHTML = `
+      <span class="text-[10px] font-semibold uppercase tracking-[0.14em] text-amber-600">Moderar</span>
+      <button onclick="editarPost('${idSafe}')" class="ml-auto rounded-lg bg-slate-100 px-2.5 py-1 text-[11px] font-medium text-slate-700 transition hover:bg-slate-200">✏️ Editar</button>
+      <button onclick="eliminarPostAdmin('${idSafe}')" class="rounded-lg bg-rose-50 px-2.5 py-1 text-[11px] font-medium text-rose-600 transition hover:bg-rose-100">🗑️ Eliminar</button>`;
+    art.prepend(tb);
+  }
+  return art;
+}
+
+function leerFiltros() {
+  return { uni: valor($('fUni')), carrera: valor($('fCarr')), ramo: valor($('fRamo')), texto: ($('fTexto').value || '').trim().toLowerCase() };
+}
+function coincide(p, f) {
+  if (f.uni && p.uni !== f.uni) return false;
+  if (f.carrera && p.carrera !== f.carrera) return false;
+  if (f.ramo && p.ramo !== f.ramo) return false;
+  if (f.texto) {
+    const blob = [p.ramo, p.carrera, p.uni, p.descripcion, p.nombre, p.ramosExtra].filter(Boolean).join(' ').toLowerCase();
+    if (!blob.includes(f.texto)) return false;
+  }
+  return true;
+}
+function filtrarPosts() {
+  const f = leerFiltros();
+  return cargarPosts().filter(p => p.tipo === tabActual && coincide(p, f)).sort((a, b) => b.creado - a.creado);
+}
+function contarPorTab() {
+  const f = leerFiltros();
+  const todos = cargarPosts();
+  return {
+    nec: todos.filter(p => p.tipo === 'necesidad' && coincide(p, f)).length,
+    tut: todos.filter(p => p.tipo === 'tutor' && coincide(p, f)).length
+  };
+}
+
+function renderPaginacion(totalFiltrados) {
+  const cont = $('paginacion');
+  const totalPaginas = Math.max(1, Math.ceil(totalFiltrados / POSTS_POR_PAGINA));
+  if (totalPaginas <= 1) { cont.innerHTML = ''; return; }
+  const inicio = (paginaActual - 1) * POSTS_POR_PAGINA + 1;
+  const fin = Math.min(paginaActual * POSTS_POR_PAGINA, totalFiltrados);
+  const paginas = [];
+  if (totalPaginas <= 7) { for (let i = 1; i <= totalPaginas; i++) paginas.push(i); }
+  else {
+    paginas.push(1);
+    if (paginaActual > 3) paginas.push('…');
+    const start = Math.max(2, paginaActual - 1);
+    const end = Math.min(totalPaginas - 1, paginaActual + 1);
+    for (let i = start; i <= end; i++) paginas.push(i);
+    if (paginaActual < totalPaginas - 2) paginas.push('…');
+    paginas.push(totalPaginas);
+  }
+  const base = 'grid h-9 min-w-9 place-items-center rounded-xl px-2.5 text-sm font-medium transition';
+  const off = `${base} border border-slate-200 bg-white text-slate-700 hover:bg-slate-50`;
+  const on = `${base} bg-slate-900 text-white`;
+  const dis = `${base} border border-slate-100 bg-white text-slate-300 cursor-not-allowed`;
+  cont.innerHTML = `
+    <div class="mt-8 flex flex-col items-center gap-3">
+      <p class="text-xs text-slate-500">Mostrando <strong class="font-semibold text-slate-700">${inicio}–${fin}</strong> de <strong class="font-semibold text-slate-700">${totalFiltrados}</strong></p>
+      <div class="flex items-center gap-1.5">
+        <button onclick="cambiarPagina(${paginaActual - 1})" ${paginaActual === 1 ? 'disabled' : ''} class="${paginaActual === 1 ? dis : off}" aria-label="Anterior">‹ <span class="hidden sm:inline">Anterior</span></button>
+        <div class="hidden sm:flex items-center gap-1.5">
+          ${paginas.map(p => p === '…' ? `<span class="grid h-9 min-w-9 place-items-center text-sm text-slate-400">…</span>` : `<button onclick="cambiarPagina(${p})" class="${p === paginaActual ? on : off}">${p}</button>`).join('')}
+        </div>
+        <div class="flex sm:hidden items-center rounded-xl bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700">${paginaActual} / ${totalPaginas}</div>
+        <button onclick="cambiarPagina(${paginaActual + 1})" ${paginaActual === totalPaginas ? 'disabled' : ''} class="${paginaActual === totalPaginas ? dis : off}" aria-label="Siguiente"><span class="hidden sm:inline">Siguiente</span> ›</button>
+      </div>
+    </div>`;
+}
+
+function cambiarPagina(n, scroll = true) {
+  const total = filtrarPosts().length;
+  const totalPaginas = Math.max(1, Math.ceil(total / POSTS_POR_PAGINA));
+  paginaActual = Math.max(1, Math.min(n, totalPaginas));
+  render();
+  if (scroll) document.getElementById('mercado').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function render() {
+  const filtrados = filtrarPosts();
+  const total = filtrados.length;
+  const conteos = contarPorTab();
+  $('cntNec').textContent = conteos.nec;
+  $('cntTut').textContent = conteos.tut;
+
+  const totalPaginas = Math.max(1, Math.ceil(total / POSTS_POR_PAGINA));
+  if (paginaActual > totalPaginas) paginaActual = totalPaginas;
+  if (paginaActual < 1) paginaActual = 1;
+
+  const inicio = (paginaActual - 1) * POSTS_POR_PAGINA;
+  const pagina = filtrados.slice(inicio, inicio + POSTS_POR_PAGINA);
+  const cont = $('lista');
+  cont.innerHTML = '';
+
+  if (!pagina.length) {
+    cont.innerHTML = `
+      <div class="col-span-full rounded-3xl border border-dashed border-slate-200 bg-white/70 px-6 py-14 text-center">
+        <p class="text-3xl">🔍</p>
+        <p class="mt-3 text-sm font-semibold tracking-tight text-slate-800">No hay publicaciones con estos filtros</p>
+        <p class="mx-auto mt-1.5 max-w-sm text-[13px] leading-relaxed text-slate-500">Prueba con menos filtros o publica tu anuncio: toma menos de un minuto y es gratis.</p>
+        <div class="mt-5 flex flex-wrap justify-center gap-2">
+          <button onclick="limpiarFiltros()" class="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50">Limpiar filtros</button>
+          <button onclick="abrirModal('${tabActual}')" class="rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-slate-800">Publicar gratis</button>
+        </div>
+      </div>`;
+    $('paginacion').innerHTML = '';
+    return;
+  }
+
+  pagina.forEach((p, i) => {
+    cont.appendChild(crearCard(p));
+    if ((i + 1) % ADS_CADA_N_TARJETAS === 0) cont.appendChild(adSlot());
+  });
+  renderPaginacion(total);
+}
+
+function limpiarFiltros() {
+  $('fTexto').value = '';
+  if (cascadaFiltros) cascadaFiltros.reset();
+  paginaActual = 1;
+  render();
+}
+function setTab(tipo) {
+  tabActual = tipo;
+  paginaActual = 1;
+  document.querySelectorAll('[data-tab]').forEach(btn => {
+    btn.className = 'tab-btn ' + (btn.dataset.tab === tipo ? TAB_ON : TAB_OFF);
+  });
+  render();
+}
+
+/* ------------------- 8. MODAL Y FORMULARIO ------------------------------ */
+let modoActual = 'necesidad';
+let cascadaForm = null;
+const MODO_ON  = 'rounded-xl bg-white px-4 py-2.5 text-sm font-medium text-slate-900 shadow-sm transition';
+const MODO_OFF = 'rounded-xl px-4 py-2.5 text-sm font-medium text-slate-500 transition hover:text-slate-700';
+
+function abrirModal(tipo = 'necesidad', id = null) {
+  editandoId = id || null;
+  $('modal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+
+  if (id) {
+    const post = cargarPosts().find(p => p.id === id);
+    if (!post) { cerrarModal(); toast('No se encontró el anuncio para editar', '⚠️'); return; }
+    $('modalTitulo').textContent = 'Editar publicación';
+    $('btnSubmitPub').textContent = 'Guardar cambios';
+    setModo(post.tipo);
+    cascadaForm.setValores(post.uni, post.carrera, post.ramo);
+    $('pNombre').value = post.nombre || '';
+    $('pDesc').value = post.descripcion || '';
+    $('pWa').value = post.whatsapp || '';
+    $('pPass').value = '';
+    if (post.tipo === 'tutor') {
+      $('pTarifa').value = post.monto || '';
+      $('pRamosExtra').value = post.ramosExtra || '';
+    } else {
+      $('pMonto').value = post.monto || '';
+    }
+    $('pPass').required = false;
+    $('pPass').removeAttribute('minlength');
+    $('lblPass').textContent = 'Contraseña (opcional)';
+    $('pPass').placeholder = 'Dejar en blanco para mantener la actual';
+  } else {
+    $('modalTitulo').textContent = 'Nueva publicación';
+    $('btnSubmitPub').textContent = 'Publicar gratis';
+    $('formPub').reset();
+    cascadaForm.reset();
+    setModo(tipo);
+    $('pPass').required = true;
+    $('pPass').setAttribute('minlength', '4');
+    $('lblPass').textContent = 'Contraseña para eliminar tu anuncio *';
+    $('pPass').placeholder = 'Crea una contraseña (mín. 4 caracteres)';
+  }
+  actualizarContadorDesc();
+}
+function cerrarModal() { $('modal').classList.add('hidden'); document.body.style.overflow = ''; editandoId = null; }
+function setModo(tipo) {
+  modoActual = tipo;
+  document.querySelectorAll('.modo-btn').forEach(b => { b.className = 'modo-btn ' + (b.dataset.modo === tipo ? MODO_ON : MODO_OFF); });
+  const esTutor = tipo === 'tutor';
+  $('campoPresupuesto').classList.toggle('hidden', esTutor);
+  $('campoTarifa').classList.toggle('hidden', !esTutor);
+  $('campoRamosExtra').classList.toggle('hidden', !esTutor);
+  $('pMonto').required  = !esTutor;
+  $('pTarifa').required = esTutor;
+  $('lblNombre').textContent = esTutor ? 'Tu nombre (visible en el anuncio)' : 'Tu nombre (opcional)';
+}
+function actualizarContadorDesc() {
+  const n = ($('pDesc').value || '').length;
+  $('descCount').textContent = `${n}/500`;
+}
+
+/* ------------------- 9. TOAST ------------------------------------------- */
+let toastTimer = null;
+function toast(msg, icon = '✅') {
+  const t = $('toast');
+  $('toastMsg').textContent = msg;
+  $('toastIcon').textContent = icon;
+  t.classList.remove('hidden');
+  t.firstElementChild.classList.remove('toast-in');
+  void t.offsetWidth;
+  t.firstElementChild.classList.add('toast-in');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.add('hidden'), 4200);
+}
+
+/* ------------------- 10. INICIALIZACIÓN -------------------------------- */
+document.addEventListener('DOMContentLoaded', () => {
+  $('anio').textContent = new Date().getFullYear();
+
+  // 🔧 Migración de seguridad: asigna IDs y protege anuncios sin contraseña
+  migrarPosts();
+  sembrarDemo();
+
+  cascadaFiltros = initCascada('fUni', 'fCarr', 'fRamo', () => { paginaActual = 1; render(); });
+  let searchTimer = null;
+  $('fTexto').addEventListener('input', () => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => { paginaActual = 1; render(); }, 250);
+  });
+  $('pDesc').addEventListener('input', actualizarContadorDesc);
+  cascadaForm = initCascada('pUni', 'pCarr', 'pRamo');
+
+  document.querySelectorAll('[data-tab]').forEach(btn => { btn.addEventListener('click', () => setTab(btn.dataset.tab)); });
+  setTab('necesidad');
+
+  document.querySelectorAll('.modo-btn').forEach(btn => { btn.addEventListener('click', () => setModo(btn.dataset.modo)); });
+  setModo('necesidad');
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (!$('modal').classList.contains('hidden')) cerrarModal();
+      if (!$('modalAdmin').classList.contains('hidden')) cerrarModalAdmin();
+      if (!$('modalEliminar').classList.contains('hidden')) cerrarModalEliminar();
+      if (!$('modalPassword').classList.contains('hidden')) cerrarModalPassword();
+    }
+  });
+
+  $('formPub').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const esTutor = modoActual === 'tutor';
+    const uni     = valor($('pUni'));
+    const carrera = valor($('pCarr'));
+    const ramo    = valor($('pRamo'));
+    const passInput = $('pPass').value.trim();
+
+    if (!uni || !carrera || !ramo) { toast('Completa universidad, carrera y ramo.', '⚠️'); return; }
+    if (!esTutor && !$('pMonto').value) { toast('Indica tu presupuesto.', '⚠️'); return; }
+    if (esTutor && !$('pTarifa').value) { toast('Indica tu tarifa por hora.', '⚠️'); return; }
+    if (!editandoId && passInput.length < 4) { toast('Tu contraseña debe tener al menos 4 caracteres.', '⚠️'); return; }
+    if (editandoId && passInput && passInput.length < 4) { toast('La nueva contraseña debe tener al menos 4 caracteres.', '⚠️'); return; }
+
+    const datos = {
+      tipo: modoActual,
+      nombre: trimTxt($('pNombre').value),
+      uni, carrera, ramo,
+      descripcion: trimTxt($('pDesc').value).slice(0, 500),
+      monto: esTutor ? $('pTarifa').value : $('pMonto').value,
+      ramosExtra: esTutor ? trimTxt($('pRamosExtra').value) : '',
+      whatsapp: trimTxt($('pWa').value)
+    };
+
+    if (editandoId) {
+      const posts = cargarPosts();
+      const idx = posts.findIndex(p => p.id === editandoId);
+      if (idx < 0) { toast('No se encontró el anuncio a editar', '⚠️'); return; }
+      const updated = { ...posts[idx], ...datos };
+      if (passInput) {
+        // Nueva contraseña: nuevo salt + nuevo hash
+        const newSalt = generarSalt();
+        updated.salt = newSalt;
+        updated.passHash = hashConSal(passInput, newSalt);
+      }
+      // Si no se cambia la contraseña, se conserva salt y passHash originales
+      posts[idx] = updated;
+      LS.set(K.POSTS, posts);
+      const tipoEdit = datos.tipo;
+      editandoId = null;
+      $('formPub').reset(); cascadaForm.reset(); setModo('necesidad'); cerrarModal();
+      tabActual = tipoEdit; paginaActual = 1; setTab(tipoEdit);
+      if (passInput) mostrarModalPassword(passInput);
+      else toast('Cambios guardados', '💾');
+    } else {
+      // Nuevo anuncio: salt aleatorio + hash con salt
+      const salt = generarSalt();
+      const post = {
+        ...datos,
+        id: nuevoId(),
+        creado: Date.now(),
+        salt: salt,
+        passHash: hashConSal(passInput, salt)
+      };
+      guardarPost(post);
+      $('formPub').reset(); cascadaForm.reset(); setModo('necesidad'); cerrarModal();
+      tabActual = post.tipo; paginaActual = 1; setTab(post.tipo);
+      mostrarModalPassword(passInput);
+    }
+  });
+
+  $('formSug').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const texto = $('sugTexto').value.trim();
+    if (!texto) return;
+    const btn = $('btnSug'); const original = btn.textContent;
+    btn.disabled = true; btn.textContent = 'Enviando…';
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ _subject: 'Sugerencia anónima · AyudantiApp', mensaje: texto, origen: 'Buzón anónimo web', fecha: new Date().toLocaleString('es-CL') })
+      });
+      if (!res.ok) throw new Error('Formspree no configurado');
+      $('sugTexto').value = '';
+      toast('¡Gracias! Tu sugerencia fue enviada.');
+    } catch (err) {
+      const url = `mailto:${CORREO_SUGERENCIAS}?subject=${encodeURIComponent('Sugerencia anónima · AyudantiApp')}&body=${encodeURIComponent(texto)}`;
+      window.location.href = url;
+      toast('Abriendo tu correo para enviar la sugerencia…', '📮');
+    } finally {
+      btn.disabled = false; btn.textContent = original;
+    }
+  });
+
+  let clicks = 0, clickTimer = null;
+  const logo = $('logoLink');
+  if (logo) {
+    logo.addEventListener('click', () => {
+      clicks++;
+      clearTimeout(clickTimer);
+      clickTimer = setTimeout(() => { clicks = 0; }, 600);
+      if (clicks >= 3) { clicks = 0; clearTimeout(clickTimer); abrirModalAdmin(); }
+    });
+  }
+
+  aplicarAdminUI();
+});
+</script>
+</body>
+</html>
