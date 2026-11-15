@@ -63,11 +63,13 @@
         <p class="-mt-0.5 text-[11px] text-slate-500">Tu oferta justa</p>
       </div>
     </a>
+
     <nav class="hidden items-center gap-1 text-sm md:flex">
       <a href="#mercado" class="rounded-xl px-3 py-2 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">Mercado</a>
       <a href="#publicar" class="rounded-xl px-3 py-2 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">Publicar</a>
       <a href="#sugerencias" class="rounded-xl px-3 py-2 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">Sugerencias</a>
     </nav>
+
     <button onclick="abrirModal('necesidad')" class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 active:scale-[.98]">Publicar gratis</button>
   </div>
 </header>
@@ -82,6 +84,7 @@
       <h1 class="mt-5 text-[34px] font-semibold leading-[1.08] tracking-tight sm:text-5xl">Encuentra tu ayudantía.<br class="hidden sm:block"><span class="text-slate-400">Paga lo justo.</span></h1>
       <p class="mx-auto mt-4 max-w-lg text-[15px] leading-relaxed text-slate-500">Alumnos publican lo que necesitan, tutores publican lo que enseñan. Sin comisiones, sin intermediarios: el trato es directo por WhatsApp.</p>
     </div>
+
     <div class="mx-auto mt-8 max-w-4xl">
       <div class="rounded-[28px] border border-slate-200/80 bg-white p-3 shadow-card sm:p-4">
         <div class="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
@@ -129,6 +132,11 @@
       <button data-tab="tutor" class="tab-btn">Tutores <span id="cntTut" class="ml-1 rounded-full bg-slate-900/90 px-1.5 py-0.5 text-[10px] font-semibold text-white">0</span></button>
     </div>
   </div>
+  <div id="loading" class="mt-7 hidden rounded-3xl border border-slate-200 bg-white py-16 text-center">
+    <div class="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-slate-900"></div>
+    <p class="mt-4 text-sm text-slate-500">Cargando anuncios…</p>
+  </div>
+  <div id="errorMsg" class="mt-7 hidden rounded-3xl border border-rose-200 bg-rose-50 p-6 text-sm text-rose-800"></div>
   <div id="lista" class="mt-7 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
   <div id="paginacion"></div>
 </section>
@@ -149,7 +157,7 @@
         <div class="rounded-2xl border border-slate-100 bg-slate-50/70 p-4"><p class="text-2xl">🎯</p><p class="mt-2 text-sm font-semibold tracking-tight">Filtros inteligentes</p><p class="mt-1 text-xs leading-relaxed text-slate-500">Universidad + Carrera + Ramo.</p></div>
         <div class="rounded-2xl border border-slate-100 bg-slate-50/70 p-4"><p class="text-2xl">💬</p><p class="mt-2 text-sm font-semibold tracking-tight">Contacto directo</p><p class="mt-1 text-xs leading-relaxed text-slate-500">Cada tarjeta abre WhatsApp.</p></div>
         <div class="rounded-2xl border border-slate-100 bg-slate-50/70 p-4"><p class="text-2xl">🔐</p><p class="mt-2 text-sm font-semibold tracking-tight">Tú controlas tu anuncio</p><p class="mt-1 text-xs leading-relaxed text-slate-500">Con tu contraseña personal eliminas tu anuncio.</p></div>
-        <div class="rounded-2xl border border-slate-100 bg-slate-50/70 p-4"><p class="text-2xl">🕵️</p><p class="mt-2 text-sm font-semibold tracking-tight">100% anónimo</p><p class="mt-1 text-xs leading-relaxed text-slate-500">Sugerencias sin nombre ni correo.</p></div>
+        <div class="rounded-2xl border border-slate-100 bg-slate-50/70 p-4"><p class="text-2xl">🌐</p><p class="mt-2 text-sm font-semibold tracking-tight">Visible para todos</p><p class="mt-1 text-xs leading-relaxed text-slate-500">Tu anuncio se muestra a todos los estudiantes.</p></div>
       </div>
     </div>
   </div>
@@ -262,7 +270,6 @@
   </div>
 </div>
 
-<!-- ===================== MODAL ELIMINAR (con hint + mostrar contraseña) ===================== -->
 <div id="modalEliminar" class="fixed inset-0 z-[75] hidden">
   <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onclick="cerrarModalEliminar()"></div>
   <div class="relative mx-auto mt-32 w-[min(440px,calc(100%-2rem))] rounded-3xl bg-white p-6 shadow-pop fade-up">
@@ -278,12 +285,11 @@
     <div class="mt-4 rounded-2xl bg-slate-50 px-4 py-3">
       <p id="delPostInfo" class="text-sm font-medium text-slate-700">—</p>
     </div>
-    <p id="delHint" class="mt-2 hidden text-[11px] leading-relaxed text-amber-700"></p>
     <div class="relative mt-3">
       <input id="delPass" type="password" placeholder="Contraseña de este anuncio" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();confirmarEliminar();}" class="w-full rounded-2xl border border-slate-200 bg-slate-50/60 px-4 py-3 pr-12 text-sm outline-none transition placeholder:text-slate-400 focus:border-slate-300 focus:bg-white focus:ring-4 focus:ring-slate-900/5" />
       <button type="button" onclick="toggleDelPass()" class="absolute right-2 top-1/2 -translate-y-1/2 grid h-8 w-8 place-items-center rounded-lg text-slate-400 transition hover:bg-slate-100" aria-label="Mostrar contraseña">👁</button>
     </div>
-    <p id="delError" class="mt-2 hidden text-[12px] leading-relaxed text-rose-600">Contraseña incorrecta. Intenta de nuevo.</p>
+    <p id="delError" class="mt-2 hidden text-[12px] leading-relaxed text-rose-600"></p>
     <div class="mt-4 flex gap-2">
       <button onclick="cerrarModalEliminar()" class="flex-1 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50">Cancelar</button>
       <button onclick="confirmarEliminar()" class="flex-1 rounded-2xl bg-rose-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-rose-700">Eliminar</button>
@@ -359,8 +365,8 @@
         <span class="text-lg leading-none">⏳</span>
         <p class="text-[12px] leading-relaxed text-sky-900"><strong class="font-semibold">Tu anuncio estará activo por 45 días.</strong> Si ya lo lograste o expira, podrás volver a publicarlo gratis en segundos.</p>
       </div>
-      <button id="btnSubmitPub" type="submit" class="w-full rounded-2xl bg-slate-900 px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-slate-800 active:scale-[.99]">Publicar gratis</button>
-      <p class="pb-2 text-center text-[11px] text-slate-400">Sin registro · sin comisiones · datos guardados en tu navegador</p>
+      <button id="btnSubmitPub" type="submit" class="w-full rounded-2xl bg-slate-900 px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-slate-800 active:scale-[.99] disabled:opacity-50 disabled:cursor-not-allowed">Publicar gratis</button>
+      <p class="pb-2 text-center text-[11px] text-slate-400">Sin registro · sin comisiones · visible para todos</p>
     </form>
   </div>
 </div>
@@ -371,35 +377,28 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ============================================================================
-   AYUDANTIAPP · Tu oferta justa
-   Fix de seguridad: contraseña por anuncio con salt + verificación estricta
+   AYUDANTIAPP · Tu oferta justa · Versión Supabase
    ========================================================================== */
 
+/* 🔴 CLAVES DE TU PROYECTO SUPABASE */
+const SUPABASE_URL      = 'https://yijcfgvbvwoisrvsocwx.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlpamNmZ3ZidndvaXNydnNvY3d4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ3Nzc5MTcsImV4cCI6MjExMDM1MzkxN30.6Wqv8FSFXE0PhpcpH0_bxhUgfgBBNHIe1sS1t8sw7mw';
+const ADMIN_PASS        = 'AyudantiApp2026*'; /* debe coincidir con el SQL */
+
 const DIAS_VIGENCIA       = 45;
-const EXPIRA_MS           = DIAS_VIGENCIA * 24 * 60 * 60 * 1000;
 const POSTS_POR_PAGINA    = 12;
 const ADS_CADA_N_TARJETAS = 6;
 const FORMSPREE_ENDPOINT  = 'https://formspree.io/f/REEMPLAZA_TU_ID';
 const CORREO_SUGERENCIAS  = 'ayudantiappoficial@gmail.com';
-const ADMIN_PASS          = 'AyudantiApp2026*';
 
-const K = {
-  POSTS:    'ayudantiapp:posts:v1',
-  UNIS:     'ayudantiapp:unis:v1',
-  CARRERAS: 'ayudantiapp:carreras:v1',
-  RAMOS:    'ayudantiapp:ramos:v1',
-  SEED:     'ayudantiapp:seed:v1',
-  ADMIN:    'ayudantiapp:admin'
-};
+/* Cliente Supabase */
+const supa = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-/* ------------------------- 1. UTILIDADES -------------------------------- */
+/* ------------------------- UTILIDADES -------------------------------- */
 const $  = (id) => document.getElementById(id);
-const LS = {
-  get(k, def) { try { const v = JSON.parse(localStorage.getItem(k)); return v ?? def; } catch { return def; } },
-  set(k, v)   { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { console.warn('localStorage lleno', e); } }
-};
 const unicos = (arr) => [...new Set(arr)];
 const orden  = (a, b) => String(a).localeCompare(String(b), 'es');
 const esc    = (s) => String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
@@ -419,42 +418,34 @@ function fmtMonto(v) {
   if (!n) return 'A convenir';
   return new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }).format(n);
 }
-function diasRestantes(ts) { return Math.max(0, Math.ceil((EXPIRA_MS - (Date.now() - ts)) / 86400000)); }
+function diasRestantes(ts) {
+  const ahora = Date.now();
+  const transcurridos = ahora - Number(ts);
+  const restantes = DIAS_VIGENCIA * 24 * 60 * 60 * 1000 - transcurridos;
+  return Math.max(0, Math.ceil(restantes / 86400000));
+}
 function simpleHash(str) {
   let h = 5381;
   for (let i = 0; i < str.length; i++) { h = ((h << 5) + h) + str.charCodeAt(i); h = h & h; }
   return 'h' + Math.abs(h).toString(36);
 }
-function nuevoId(prefijo = 'p') { return prefijo + '_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8); }
-
-/* 🔐 Salt aleatorio (16 bytes) para cada anuncio */
+function hashConSal(password, salt) { return simpleHash(String(salt) + '|' + String(password) + '|' + String(salt)); }
+function nuevoId() { return 'p_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8); }
 function generarSalt() {
   try {
-    const arr = new Uint8Array(16);
-    crypto.getRandomValues(arr);
+    const arr = new Uint8Array(16); crypto.getRandomValues(arr);
     return Array.from(arr).map(b => b.toString(16).padStart(2, '0')).join('');
-  } catch {
-    return 's_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
-  }
+  } catch { return 's_' + Math.random().toString(36).slice(2) + Date.now().toString(36); }
 }
 
-/* Hash con salt: dos contraseñas iguales producen hashes distintos en posts distintos */
-function hashConSal(password, salt) {
-  return simpleHash(String(salt) + '|' + String(password) + '|' + String(salt));
-}
+/* Catálogos custom en localStorage */
+const KCAT = { UNIS: 'ayudantiapp:unis:v2', CARRERAS: 'ayudantiapp:carreras:v2', RAMOS: 'ayudantiapp:ramos:v2' };
+const CAT = {
+  get(k, def) { try { const v = JSON.parse(localStorage.getItem(k)); return v ?? def; } catch { return def; } },
+  set(k, v)   { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
 
-/* Verificación central: SIEMPRE exige que el post tenga passHash */
-function verificarPassword(entered, post) {
-  if (!post) return { ok: false, razon: 'no_existe' };
-  if (!post.passHash) return { ok: false, razon: 'sin_password' };
-  if (post.salt) {
-    return { ok: hashConSal(entered, post.salt) === post.passHash, razon: 'ok' };
-  }
-  // Compatibilidad con posts antiguos sin salt
-  return { ok: simpleHash(entered) === post.passHash, razon: 'ok' };
-}
-
-/* ------------------------- 2. CATÁLOGO ---------------------------------- */
+/* ------------------------- CATÁLOGO ---------------------------------- */
 const CARRERAS = {
   "Ingeniería Civil Informática": ["Cálculo I","Cálculo II","Álgebra Lineal","Programación","Estructuras de Datos","Bases de Datos","Redes de Computadores","Sistemas Operativos","Física I","Estadística","Ingeniería de Software","Inteligencia Artificial"],
   "Ingeniería Civil Industrial": ["Cálculo I","Cálculo II","Álgebra Lineal","Física I","Estadística","Investigación de Operaciones","Microeconomía","Macroeconomía","Gestión de Operaciones","Contabilidad","Finanzas"],
@@ -540,39 +531,23 @@ const UNIVERSIDADES = {
 
 const RAMOS_GENERALES = ["Cálculo I","Cálculo II","Álgebra Lineal","Física I","Física II","Química General","Estadística","Programación","Biología Celular","Anatomía","Histología","Contabilidad","Microeconomía","Macroeconomía","Derecho Civil","Psicología General","Inglés","Historia de Chile","Metodología de la Investigación"];
 
-/* ------------------- 3. ACCESORES AL CATÁLOGO --------------------------- */
-function opcionesUniversidades() { return unicos([...Object.keys(UNIVERSIDADES), ...LS.get(K.UNIS, [])]).sort(orden); }
-function todasLasCarreras() { return unicos([...Object.keys(CARRERAS), ...LS.get(K.CARRERAS, [])]).sort(orden); }
+function opcionesUniversidades() { return unicos([...Object.keys(UNIVERSIDADES), ...CAT.get(KCAT.UNIS, [])]).sort(orden); }
+function todasLasCarreras() { return unicos([...Object.keys(CARRERAS), ...CAT.get(KCAT.CARRERAS, [])]).sort(orden); }
 function carrerasDeUni(uni) {
-  const custom = LS.get(K.CARRERAS, []);
+  const custom = CAT.get(KCAT.CARRERAS, []);
   if (!uni) return todasLasCarreras();
   const info = UNIVERSIDADES[uni];
   if (!info) return todasLasCarreras();
   return unicos([...info.carreras, ...custom]).sort(orden);
 }
 function ramosDeCarrera(carrera) {
-  const custom = LS.get(K.RAMOS, {});
+  const custom = CAT.get(KCAT.RAMOS, {});
   if (!carrera) return unicos([...RAMOS_GENERALES, ...Object.values(custom).flat()]).sort(orden);
   const base = CARRERAS[carrera] || [];
   return unicos([...base, ...(custom[carrera] || [])]).sort(orden);
 }
-function asegurarCatalogos(uni, carrera, ramo) {
-  if (uni && !UNIVERSIDADES[uni]) {
-    const arr = LS.get(K.UNIS, []);
-    if (!arr.some(x => x.toLowerCase() === uni.toLowerCase())) { arr.push(uni); LS.set(K.UNIS, arr); }
-  }
-  if (carrera && !CARRERAS[carrera]) {
-    const arr = LS.get(K.CARRERAS, []);
-    if (!arr.some(x => x.toLowerCase() === carrera.toLowerCase())) { arr.push(carrera); LS.set(K.CARRERAS, arr); }
-  }
-  if (ramo && carrera) {
-    const map = LS.get(K.RAMOS, {});
-    const lista = map[carrera] || [];
-    if (!lista.includes(ramo) && !(CARRERAS[carrera] || []).includes(ramo)) { map[carrera] = [...lista, ramo]; LS.set(K.RAMOS, map); }
-  }
-}
 
-/* ------------------- 4. SELECTS EN CASCADA + "OTRO" --------------------- */
+/* ------------------- SELECTS EN CASCADA + "OTRO" --------------------- */
 function fillSelect(sel, valores, placeholder) {
   const prev = sel.value;
   sel.innerHTML = '';
@@ -615,20 +590,20 @@ function initCascada(uniId, carrId, ramoId, onChange) {
   function renderRamos()    { fillSelect(r, ramosDeCarrera(valor(c)), 'Todos los ramos'); }
 
   function agregarUniversidad(v) {
-    const arr = LS.get(K.UNIS, []);
+    const arr = CAT.get(KCAT.UNIS, []);
     if (!arr.some(x => x.toLowerCase() === v.toLowerCase())) arr.push(v);
-    LS.set(K.UNIS, arr); renderUnis(); u.value = v; renderCarreras(); renderRamos(); cb();
+    CAT.set(KCAT.UNIS, arr); renderUnis(); u.value = v; renderCarreras(); renderRamos(); cb();
   }
   function agregarCarrera(v) {
-    const arr = LS.get(K.CARRERAS, []);
+    const arr = CAT.get(KCAT.CARRERAS, []);
     if (!arr.some(x => x.toLowerCase() === v.toLowerCase())) arr.push(v);
-    LS.set(K.CARRERAS, arr); renderCarreras(); c.value = v; renderRamos(); cb();
+    CAT.set(KCAT.CARRERAS, arr); renderCarreras(); c.value = v; renderRamos(); cb();
   }
   function agregarRamo(v) {
-    const map = LS.get(K.RAMOS, {});
+    const map = CAT.get(KCAT.RAMOS, {});
     const key = valor(c) || 'General';
     map[key] = unicos([...(map[key] || []), v]);
-    LS.set(K.RAMOS, map); renderRamos(); r.value = v; cb();
+    CAT.set(KCAT.RAMOS, map); renderRamos(); r.value = v; cb();
   }
   u.addEventListener('change', () => {
     if (u.value === '__OTRO__') boxU.mostrar(); else boxU.ocultar();
@@ -649,9 +624,24 @@ function initCascada(uniId, carrId, ramoId, onChange) {
       c.value = ''; boxC.ocultar(); renderRamos();
       r.value = ''; boxR.ocultar(); cb();
     },
-    refresh() { renderUnis(); renderCarreras(); renderRamos(); },
     setValores(uni, carrera, ramo) {
-      asegurarCatalogos(uni, carrera, ramo);
+      // Asegurar que existan en catálogo local
+      if (uni && !UNIVERSIDADES[uni]) {
+        const arr = CAT.get(KCAT.UNIS, []);
+        if (!arr.some(x => x.toLowerCase() === uni.toLowerCase())) { arr.push(uni); CAT.set(KCAT.UNIS, arr); }
+      }
+      if (carrera && !CARRERAS[carrera]) {
+        const arr = CAT.get(KCAT.CARRERAS, []);
+        if (!arr.some(x => x.toLowerCase() === carrera.toLowerCase())) { arr.push(carrera); CAT.set(KCAT.CARRERAS, arr); }
+      }
+      if (ramo && carrera) {
+        const map = CAT.get(KCAT.RAMOS, {});
+        const lista = map[carrera] || [];
+        if (!lista.includes(ramo) && !(CARRERAS[carrera] || []).includes(ramo)) {
+          map[carrera] = [...lista, ramo];
+          CAT.set(KCAT.RAMOS, map);
+        }
+      }
       fillSelect(u, opcionesUniversidades(), 'Todas las universidades');
       u.value = uni || ''; boxU.ocultar();
       fillSelect(c, carrerasDeUni(uni), 'Todas las carreras');
@@ -663,189 +653,131 @@ function initCascada(uniId, carrId, ramoId, onChange) {
   };
 }
 
-/* ------------------- 5. PUBLICACIONES (localStorage) -------------------- */
-function cargarPosts() {
-  const posts = LS.get(K.POSTS, []);
-  const ahora = Date.now();
-  const vigentes = posts.filter(p => (ahora - Number(p.creado)) < EXPIRA_MS);
-  if (vigentes.length !== posts.length) {
-    LS.set(K.POSTS, vigentes);
-    const eliminados = posts.length - vigentes.length;
-    setTimeout(() => toast(`🧹 ${eliminados} anuncio(s) de más de ${DIAS_VIGENCIA} días fueron retirados automáticamente.`), 900);
-  }
-  return vigentes;
-}
-function guardarPost(post) { const posts = cargarPosts(); posts.push(post); LS.set(K.POSTS, posts); }
+/* ------------------- DATOS: CARGA DESDE SUPABASE --------------------- */
+let postsCache = [];
+let cargando = false;
 
-/* 🔧 MIGRACIÓN: asigna IDs + passHash+salt a anuncios antiguos sin contraseña.
-   Con esto, ningún post queda sin protección. */
-function migrarPosts() {
-  const posts = LS.get(K.POSTS, []);
-  if (!Array.isArray(posts)) return;
-  let cambios = 0;
-  posts.forEach((p, i) => {
-    if (!p.id) {
-      p.id = 'p_mig_' + Date.now() + '_' + i + '_' + Math.random().toString(36).slice(2, 6);
-      cambios++;
-    }
-    if (!p.passHash) {
-      // Post legacy sin contraseña: se le asigna una contraseña aleatoria inexpugnable.
-      // Solo el admin podrá eliminarlo.
-      const salt = generarSalt();
-      p.salt = salt;
-      p.passHash = hashConSal('__LEGACY_NO_RESET__' + generarSalt(), salt);
-      cambios++;
-    }
-  });
-  if (cambios > 0) {
-    LS.set(K.POSTS, posts);
-    console.info(`[AyudantiApp] ${cambios} publicación(es) migrada(s) con contraseña.`);
-  }
-}
-
-/* Datos de ejemplo — ahora CON salt por anuncio para máxima seguridad */
-function sembrarDemo() {
-  if (LS.get(K.SEED, false)) return;
-  const hoy = Date.now();
-  const saltDemo = 'demo_salt_shared_v1'; // Un salt común para los demos (todos usan "demo")
-  const passDemo = hashConSal('demo', saltDemo);
-  const demo = [
-    { id: 'p_demo_1', salt: saltDemo, tipo:'necesidad', nombre:'Camila', uni:'Pontificia Universidad Católica de Valparaíso (PUCV)', carrera:'Ingeniería Civil Industrial', ramo:'Cálculo II', monto:'8000', whatsapp:'+56912345678', creado: hoy - 1*86400000, passHash: passDemo, descripcion:'Necesito reforzar integrales impropias y series antes del certamen del viernes. Ideal alguien que haya pasado el ramo con la profe Rojas.' },
-    { id: 'p_demo_2', salt: saltDemo, tipo:'tutor', nombre:'Matías', uni:'Universidad Técnica Federico Santa María (USM)', carrera:'Ingeniería Civil Informática', ramo:'Estructuras de Datos', monto:'12000', whatsapp:'+56987654321', creado: hoy - 3*86400000, passHash: passDemo, descripcion:'Ayudo con listas enlazadas, árboles y complejidad algorítmica. Clases online por Meet con ejercicios en vivo y material propio.', ramosExtra:'Programación, Bases de Datos' },
-    { id: 'p_demo_3', salt: saltDemo, tipo:'necesidad', nombre:'Ignacio', uni:'Universidad de Chile', carrera:'Medicina', ramo:'Farmacología', monto:'10000', whatsapp:'+56911223344', creado: hoy - 5*86400000, passHash: passDemo, descripcion:'Busco repaso de farmacocinética y antibióticos antes del examen de grado. Puedo pagar por sesiones de 90 minutos.' },
-    { id: 'p_demo_4', salt: saltDemo, tipo:'tutor', nombre:'Fernanda', uni:'Universidad de Talca (UTAL)', carrera:'Derecho', ramo:'Derecho Civil', monto:'9000', whatsapp:'+56922334455', creado: hoy - 7*86400000, passHash: passDemo, descripcion:'Profesora particular de Derecho Civil (obligaciones y contratos). Preparo material según la malla y los apuntes de tu sección.', ramosExtra:'Derecho Comercial' },
-    { id: 'p_demo_5', salt: saltDemo, tipo:'necesidad', nombre:'Vicente', uni:'Universidad de Playa Ancha (UPLA)', carrera:'Pedagogía en Matemática', ramo:'Álgebra Lineal', monto:'7000', whatsapp:'+56933445566', creado: hoy - 10*86400000, passHash: passDemo, descripcion:'Se me complica con transformaciones lineales y valores propios. Busco alguien paciente para clases presenciales en Valparaíso.' },
-    { id: 'p_demo_6', salt: saltDemo, tipo:'tutor', nombre:'Antonia', uni:'Pontificia Universidad Católica de Chile (UC)', carrera:'Psicología', ramo:'Estadística', monto:'15000', whatsapp:'+56944556677', creado: hoy - 12*86400000, passHash: passDemo, descripcion:'Clases de estadística aplicada a psicología: descriptiva, inferencia y uso de SPSS. Enfoque práctico con bases de datos reales.', ramosExtra:'Metodología de la Investigación' },
-    { id: 'p_demo_7', salt: saltDemo, tipo:'necesidad', nombre:'Javiera', uni:'Universidad de Santiago de Chile (USACH)', carrera:'Ingeniería Civil Industrial', ramo:'Investigación de Operaciones', monto:'9000', whatsapp:'+56955667788', creado: hoy - 14*86400000, passHash: passDemo, descripcion:'Necesito ayuda con programación lineal y método simplex antes del certamen 2. Presencial en la USACH o por Zoom.' },
-    { id: 'p_demo_8', salt: saltDemo, tipo:'tutor', nombre:'Diego', uni:'Universidad de Valparaíso (UV)', carrera:'Kinesiología', ramo:'Anatomía', monto:'11000', whatsapp:'+56966778899', creado: hoy - 15*86400000, passHash: passDemo, descripcion:'Ayudo con anatomía humana: sistema músculo-esquelético, neuroanatomía y preparación de certámenes prácticos con modelos.', ramosExtra:'Fisiología, Biomecánica' },
-    { id: 'p_demo_9', salt: saltDemo, tipo:'necesidad', nombre:'Martina', uni:'Universidad de Playa Ancha (UPLA)', carrera:'Trabajo Social', ramo:'Metodología de Intervención', monto:'6000', whatsapp:'+56977889900', creado: hoy - 16*86400000, passHash: passDemo, descripcion:'Busco alguien que me oriente con el diseño de un proyecto de intervención comunitario. Ideal con experiencia en trabajo territorial.' },
-    { id: 'p_demo_10', salt: saltDemo, tipo:'tutor', nombre:'Sebastián', uni:'Universidad Técnica Federico Santa María (USM)', carrera:'Ingeniería Civil Mecánica', ramo:'Termodinámica', monto:'13000', whatsapp:'+56988990011', creado: hoy - 18*86400000, passHash: passDemo, descripcion:'Clases de termodinámica aplicada: ciclos, entropía y máquinas térmicas. Preparo guías según tu profesor.', ramosExtra:'Mecánica de Fluidos' }
-  ];
-  LS.set(K.POSTS, demo);
-  LS.set(K.SEED, true);
-}
-
-/* ------------------- 6. MODO ADMINISTRADOR ------------------------------ */
-let esAdmin = localStorage.getItem(K.ADMIN) === '1';
-function abrirModalAdmin() {
-  $('modalAdmin').classList.remove('hidden');
-  $('adminError').classList.add('hidden');
-  $('adminPass').value = '';
-  document.body.style.overflow = 'hidden';
-  setTimeout(() => $('adminPass').focus(), 60);
-}
-function cerrarModalAdmin() { $('modalAdmin').classList.add('hidden'); document.body.style.overflow = ''; }
-function validarClave() {
-  const v = $('adminPass').value;
-  if (v === ADMIN_PASS) {
-    esAdmin = true; localStorage.setItem(K.ADMIN, '1');
-    cerrarModalAdmin(); aplicarAdminUI(); toast('Modo moderador activado', '🛡️');
-  } else {
-    $('adminError').classList.remove('hidden'); $('adminPass').value = ''; $('adminPass').focus();
-  }
-}
-function desactivarAdmin() { esAdmin = false; localStorage.removeItem(K.ADMIN); aplicarAdminUI(); toast('Modo moderador desactivado', '👋'); }
-function aplicarAdminUI() { $('adminBadge').classList.toggle('hidden', !esAdmin); render(); }
-function eliminarPostAdmin(id) {
-  if (!esAdmin) return;
-  if (!id) { toast('No se pudo identificar el anuncio', '⚠️'); return; }
-  if (!confirm('¿Eliminar esta publicación como moderador? Esta acción no se puede deshacer.')) return;
-  const antes = cargarPosts().length;
-  LS.set(K.POSTS, cargarPosts().filter(p => p.id !== id));
-  render();
-  if (cargarPosts().length < antes) toast('Publicación eliminada', '🗑️');
-}
-function editarPost(id) {
-  if (!esAdmin) return;
+async function cargarPostsDesdeServidor() {
+  if (cargando) return postsCache;
+  cargando = true;
   try {
-    const post = cargarPosts().find(p => p.id === id);
-    if (!post) { toast('No se encontró el anuncio. Recargando…', '⚠️'); migrarPosts(); render(); return; }
-    abrirModal(post.tipo, id);
-  } catch (err) { console.error(err); toast('Error al abrir el editor.', '❌'); }
-}
+    // 1) Limpiar expirados (silencioso, no bloquea si falla)
+    try { await supa.rpc('limpiar_posts_expirados'); } catch (e) { /* ignorar */ }
 
-/* ------------------- 6b. ELIMINAR CON CONTRASEÑA (autor) ---------------- */
-let deleteTargetId = null;
+    // 2) Leer todos los posts
+    const { data, error } = await supa
+      .from('posts')
+      .select('*')
+      .order('creado', { ascending: false })
+      .limit(1000);
 
-function abrirModalEliminar(id) {
-  const post = cargarPosts().find(p => p.id === id);
-  if (!post) return;
-  deleteTargetId = id;
-  $('delPostInfo').textContent = `${post.ramo} · ${post.carrera}`;
+    if (error) throw error;
 
-  // Hint según tipo de anuncio
-  const hint = $('delHint');
-  if (String(id).startsWith('p_demo_')) {
-    hint.textContent = '💡 Este es un anuncio de ejemplo. Su contraseña es: demo';
-    hint.classList.remove('hidden');
-  } else if (!post.passHash) {
-    hint.textContent = '⚠️ Esta publicación no tiene contraseña registrada. Contacta a ayudantiappoficial@gmail.com si es tuya.';
-    hint.classList.remove('hidden');
-  } else {
-    hint.classList.add('hidden');
-    hint.textContent = '';
-  }
-
-  $('delPass').value = '';
-  $('delPass').type = 'password';
-  $('delError').classList.add('hidden');
-  $('modalEliminar').classList.remove('hidden');
-  document.body.style.overflow = 'hidden';
-  setTimeout(() => $('delPass').focus(), 60);
-}
-function cerrarModalEliminar() { $('modalEliminar').classList.add('hidden'); document.body.style.overflow = ''; deleteTargetId = null; }
-function toggleDelPass() {
-  const inp = $('delPass');
-  inp.type = inp.type === 'password' ? 'text' : 'password';
-  inp.focus();
-}
-function confirmarEliminar() {
-  if (!deleteTargetId) return;
-  const post = cargarPosts().find(p => p.id === deleteTargetId);
-  if (!post) { cerrarModalEliminar(); return; }
-
-  const entered = $('delPass').value;
-  const check = verificarPassword(entered, post);
-
-  if (check.ok) {
-    LS.set(K.POSTS, cargarPosts().filter(p => p.id !== deleteTargetId));
-    cerrarModalEliminar();
-    render();
-    toast('Tu anuncio fue eliminado', '🗑️');
-  } else if (check.razon === 'sin_password') {
-    $('delError').textContent = 'Esta publicación es antigua y no tiene contraseña. Contacta a ayudantiappoficial@gmail.com si es tuya.';
-    $('delError').classList.remove('hidden');
-  } else {
-    $('delError').textContent = 'Contraseña incorrecta. Recuerda que debe ser la de ESTE anuncio específico.';
-    $('delError').classList.remove('hidden');
-    $('delPass').value = '';
-    $('delPass').focus();
+    // 3) Mapear de snake_case a camelCase para el resto del código
+    postsCache = (data || []).map(p => ({
+      id: p.id,
+      tipo: p.tipo,
+      nombre: p.nombre || '',
+      uni: p.uni,
+      carrera: p.carrera,
+      ramo: p.ramo,
+      descripcion: p.descripcion,
+      monto: p.monto,
+      ramosExtra: p.ramos_extra || '',
+      whatsapp: p.whatsapp,
+      creado: Number(p.creado),
+      salt: p.salt,
+      passHash: p.pass_hash
+    }));
+    return postsCache;
+  } catch (err) {
+    console.error('Error cargando posts:', err);
+    mostrarError('No se pudieron cargar los anuncios. Revisa tu conexión o la configuración de Supabase.');
+    return [];
+  } finally {
+    cargando = false;
   }
 }
 
-/* ------------------- 6c. RECORDATORIO DE CONTRASEÑA --------------------- */
-function mostrarModalPassword(password) {
-  $('passShown').textContent = password;
-  $('modalPassword').classList.remove('hidden');
-  document.body.style.overflow = 'hidden';
-}
-function cerrarModalPassword() { $('modalPassword').classList.add('hidden'); document.body.style.overflow = ''; $('passShown').textContent = '—'; }
-function copiarPassword() {
-  const pwd = $('passShown').textContent;
-  if (!pwd || pwd === '—') return;
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(pwd).then(() => toast('Contraseña copiada', '📋')).catch(() => toast('No se pudo copiar.', '⚠️'));
-  } else { toast('Tu navegador no permite copiar automáticamente.', '⚠️'); }
+async function guardarPost(post) {
+  const { error } = await supa.from('posts').insert({
+    id: post.id,
+    tipo: post.tipo,
+    nombre: post.nombre,
+    uni: post.uni,
+    carrera: post.carrera,
+    ramo: post.ramo,
+    descripcion: post.descripcion,
+    monto: post.monto,
+    ramos_extra: post.ramosExtra,
+    whatsapp: post.whatsapp,
+    creado: post.creado,
+    salt: post.salt,
+    pass_hash: post.passHash
+  });
+  if (error) throw error;
+  postsCache.unshift(post);
 }
 
-/* ------------------- 7. RENDER + PAGINACIÓN + ADS ----------------------- */
+/* ------------------- MODALES / UI --------------------- */
+function mostrarError(msg) {
+  const el = $('errorMsg');
+  el.textContent = msg;
+  el.classList.remove('hidden');
+  setTimeout(() => el.classList.add('hidden'), 8000);
+}
+
 let tabActual = 'necesidad';
 let paginaActual = 1;
 let cascadaFiltros = null;
+let cascadaForm = null;
+let modoActual = 'necesidad';
 let editandoId = null;
+let deleteTargetId = null;
+let esAdmin = localStorage.getItem('ayudantiapp:admin') === '1';
 
 const TAB_ON  = 'flex-1 rounded-xl bg-white px-4 py-2 text-sm font-medium text-slate-900 shadow-sm transition';
 const TAB_OFF = 'flex-1 rounded-xl px-4 py-2 text-sm font-medium text-slate-500 transition hover:text-slate-700';
+const MODO_ON  = 'rounded-xl bg-white px-4 py-2.5 text-sm font-medium text-slate-900 shadow-sm transition';
+const MODO_OFF = 'rounded-xl px-4 py-2.5 text-sm font-medium text-slate-500 transition hover:text-slate-700';
+
+function toast(msg, icon = '✅') {
+  const t = $('toast');
+  $('toastMsg').textContent = msg;
+  $('toastIcon').textContent = icon;
+  t.classList.remove('hidden');
+  t.firstElementChild.classList.remove('toast-in');
+  void t.offsetWidth;
+  t.firstElementChild.classList.add('toast-in');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.add('hidden'), 4200);
+}
+
+/* ------------------- RENDER --------------------- */
+function leerFiltros() {
+  return { uni: valor($('fUni')), carrera: valor($('fCarr')), ramo: valor($('fRamo')), texto: ($('fTexto').value || '').trim().toLowerCase() };
+}
+function coincide(p, f) {
+  if (f.uni && p.uni !== f.uni) return false;
+  if (f.carrera && p.carrera !== f.carrera) return false;
+  if (f.ramo && p.ramo !== f.ramo) return false;
+  if (f.texto) {
+    const blob = [p.ramo, p.carrera, p.uni, p.descripcion, p.nombre, p.ramosExtra].filter(Boolean).join(' ').toLowerCase();
+    if (!blob.includes(f.texto)) return false;
+  }
+  return true;
+}
+function filtrarPosts() {
+  const f = leerFiltros();
+  return postsCache.filter(p => p.tipo === tabActual && coincide(p, f));
+}
+function contarPorTab() {
+  const f = leerFiltros();
+  return {
+    nec: postsCache.filter(p => p.tipo === 'necesidad' && coincide(p, f)).length,
+    tut: postsCache.filter(p => p.tipo === 'tutor' && coincide(p, f)).length
+  };
+}
 
 function adSlot() {
   const div = document.createElement('div');
@@ -866,7 +798,7 @@ function crearCard(p) {
   const chips = String(p.ramosExtra || '').split(',').map(s => s.trim()).filter(Boolean).slice(0, 4);
   const waMsg = encodeURIComponent(`Hola${p.nombre ? ', ' + p.nombre : ''}. Te escribo desde AyudantiApp por tu publicación de "${p.ramo}" (${p.carrera} · ${p.uni}). ¿Sigue disponible?`);
   const wa = `https://wa.me/${normalizarTel(p.whatsapp)}?text=${waMsg}`;
-  const idSafe = String(p.id || '').replace(/[^a-zA-Z0-9_-]/g, '');
+  const idSafe = String(p.id).replace(/[^a-zA-Z0-9_-]/g, '');
 
   art.innerHTML = `
     <div class="flex items-center justify-between gap-3">
@@ -906,32 +838,6 @@ function crearCard(p) {
     art.prepend(tb);
   }
   return art;
-}
-
-function leerFiltros() {
-  return { uni: valor($('fUni')), carrera: valor($('fCarr')), ramo: valor($('fRamo')), texto: ($('fTexto').value || '').trim().toLowerCase() };
-}
-function coincide(p, f) {
-  if (f.uni && p.uni !== f.uni) return false;
-  if (f.carrera && p.carrera !== f.carrera) return false;
-  if (f.ramo && p.ramo !== f.ramo) return false;
-  if (f.texto) {
-    const blob = [p.ramo, p.carrera, p.uni, p.descripcion, p.nombre, p.ramosExtra].filter(Boolean).join(' ').toLowerCase();
-    if (!blob.includes(f.texto)) return false;
-  }
-  return true;
-}
-function filtrarPosts() {
-  const f = leerFiltros();
-  return cargarPosts().filter(p => p.tipo === tabActual && coincide(p, f)).sort((a, b) => b.creado - a.creado);
-}
-function contarPorTab() {
-  const f = leerFiltros();
-  const todos = cargarPosts();
-  return {
-    nec: todos.filter(p => p.tipo === 'necesidad' && coincide(p, f)).length,
-    tut: todos.filter(p => p.tipo === 'tutor' && coincide(p, f)).length
-  };
 }
 
 function renderPaginacion(totalFiltrados) {
@@ -1030,19 +936,14 @@ function setTab(tipo) {
   render();
 }
 
-/* ------------------- 8. MODAL Y FORMULARIO ------------------------------ */
-let modoActual = 'necesidad';
-let cascadaForm = null;
-const MODO_ON  = 'rounded-xl bg-white px-4 py-2.5 text-sm font-medium text-slate-900 shadow-sm transition';
-const MODO_OFF = 'rounded-xl px-4 py-2.5 text-sm font-medium text-slate-500 transition hover:text-slate-700';
-
+/* ------------------- MODAL PUBLICAR / EDITAR --------------------- */
 function abrirModal(tipo = 'necesidad', id = null) {
   editandoId = id || null;
   $('modal').classList.remove('hidden');
   document.body.style.overflow = 'hidden';
 
   if (id) {
-    const post = cargarPosts().find(p => p.id === id);
+    const post = postsCache.find(p => p.id === id);
     if (!post) { cerrarModal(); toast('No se encontró el anuncio para editar', '⚠️'); return; }
     $('modalTitulo').textContent = 'Editar publicación';
     $('btnSubmitPub').textContent = 'Guardar cambios';
@@ -1092,27 +993,140 @@ function actualizarContadorDesc() {
   $('descCount').textContent = `${n}/500`;
 }
 
-/* ------------------- 9. TOAST ------------------------------------------- */
-let toastTimer = null;
-function toast(msg, icon = '✅') {
-  const t = $('toast');
-  $('toastMsg').textContent = msg;
-  $('toastIcon').textContent = icon;
-  t.classList.remove('hidden');
-  t.firstElementChild.classList.remove('toast-in');
-  void t.offsetWidth;
-  t.firstElementChild.classList.add('toast-in');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.add('hidden'), 4200);
+/* ------------------- ADMIN --------------------- */
+function abrirModalAdmin() {
+  $('modalAdmin').classList.remove('hidden');
+  $('adminError').classList.add('hidden');
+  $('adminPass').value = '';
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => $('adminPass').focus(), 60);
+}
+function cerrarModalAdmin() { $('modalAdmin').classList.add('hidden'); document.body.style.overflow = ''; }
+function validarClave() {
+  if ($('adminPass').value === ADMIN_PASS) {
+    esAdmin = true;
+    localStorage.setItem('ayudantiapp:admin', '1');
+    cerrarModalAdmin();
+    aplicarAdminUI();
+    toast('Modo moderador activado', '🛡️');
+  } else {
+    $('adminError').classList.remove('hidden');
+    $('adminPass').value = '';
+    $('adminPass').focus();
+  }
+}
+function desactivarAdmin() {
+  esAdmin = false;
+  localStorage.removeItem('ayudantiapp:admin');
+  aplicarAdminUI();
+  toast('Modo moderador desactivado', '👋');
+}
+function aplicarAdminUI() {
+  $('adminBadge').classList.toggle('hidden', !esAdmin);
+  render();
+}
+async function eliminarPostAdmin(id) {
+  if (!esAdmin) return;
+  if (!confirm('¿Eliminar esta publicación como moderador?')) return;
+  try {
+    const { data, error } = await supa.rpc('borrar_post_admin', { p_id: id, p_admin_pass: ADMIN_PASS });
+    if (error) throw error;
+    if (data === true) {
+      postsCache = postsCache.filter(p => p.id !== id);
+      render();
+      toast('Publicación eliminada', '🗑️');
+    } else {
+      toast('La clave admin no coincide con la del servidor', '❌');
+    }
+  } catch (err) {
+    console.error(err);
+    toast('Error al eliminar. Intenta de nuevo.', '❌');
+  }
+}
+function editarPost(id) {
+  if (!esAdmin) return;
+  const post = postsCache.find(p => p.id === id);
+  if (!post) { toast('No se encontró el anuncio', '⚠️'); return; }
+  abrirModal(post.tipo, id);
 }
 
-/* ------------------- 10. INICIALIZACIÓN -------------------------------- */
-document.addEventListener('DOMContentLoaded', () => {
-  $('anio').textContent = new Date().getFullYear();
+/* ------------------- ELIMINAR CON CONTRASEÑA --------------------- */
+function abrirModalEliminar(id) {
+  const post = postsCache.find(p => p.id === id);
+  if (!post) return;
+  deleteTargetId = id;
+  $('delPostInfo').textContent = `${post.ramo} · ${post.carrera}`;
+  $('delPass').value = '';
+  $('delPass').type = 'password';
+  $('delError').classList.add('hidden');
+  $('modalEliminar').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => $('delPass').focus(), 60);
+}
+function cerrarModalEliminar() {
+  $('modalEliminar').classList.add('hidden');
+  document.body.style.overflow = '';
+  deleteTargetId = null;
+}
+function toggleDelPass() {
+  const inp = $('delPass');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  inp.focus();
+}
+async function confirmarEliminar() {
+  if (!deleteTargetId) return;
+  const post = postsCache.find(p => p.id === deleteTargetId);
+  if (!post) { cerrarModalEliminar(); return; }
 
-  // 🔧 Migración de seguridad: asigna IDs y protege anuncios sin contraseña
-  migrarPosts();
-  sembrarDemo();
+  const entered = $('delPass').value;
+  const hashIngresado = hashConSal(entered, post.salt);
+
+  try {
+    const { data, error } = await supa.rpc('borrar_post_con_password', {
+      p_id: deleteTargetId,
+      p_pass_hash: hashIngresado
+    });
+    if (error) throw error;
+    if (data === true) {
+      postsCache = postsCache.filter(p => p.id !== deleteTargetId);
+      cerrarModalEliminar();
+      render();
+      toast('Tu anuncio fue eliminado', '🗑️');
+    } else {
+      $('delError').textContent = 'Contraseña incorrecta. Debe ser la de ESTE anuncio.';
+      $('delError').classList.remove('hidden');
+      $('delPass').value = '';
+      $('delPass').focus();
+    }
+  } catch (err) {
+    console.error(err);
+    $('delError').textContent = 'Error al conectar con el servidor. Intenta de nuevo.';
+    $('delError').classList.remove('hidden');
+  }
+}
+
+/* ------------------- MODAL PASSWORD (recordatorio) --------------------- */
+function mostrarModalPassword(password) {
+  $('passShown').textContent = password;
+  $('modalPassword').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+function cerrarModalPassword() {
+  $('modalPassword').classList.add('hidden');
+  document.body.style.overflow = '';
+  $('passShown').textContent = '—';
+}
+function copiarPassword() {
+  const pwd = $('passShown').textContent;
+  if (!pwd || pwd === '—') return;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(pwd).then(() => toast('Contraseña copiada', '📋')).catch(() => toast('No se pudo copiar.', '⚠️'));
+  } else { toast('Tu navegador no permite copiar automáticamente.', '⚠️'); }
+}
+
+/* ------------------- INIT --------------------- */
+document.addEventListener('DOMContentLoaded', async () => {
+  $('anio').textContent = new Date().getFullYear();
 
   cascadaFiltros = initCascada('fUni', 'fCarr', 'fRamo', () => { paginaActual = 1; render(); });
   let searchTimer = null;
@@ -1138,7 +1152,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  $('formPub').addEventListener('submit', (e) => {
+  // Cargar anuncios desde Supabase
+  $('loading').classList.remove('hidden');
+  await cargarPostsDesdeServidor();
+  $('loading').classList.add('hidden');
+  aplicarAdminUI();
+
+  // Submit del formulario
+  $('formPub').addEventListener('submit', async (e) => {
     e.preventDefault();
     const esTutor = modoActual === 'tutor';
     const uni     = valor($('pUni'));
@@ -1162,43 +1183,68 @@ document.addEventListener('DOMContentLoaded', () => {
       whatsapp: trimTxt($('pWa').value)
     };
 
-    if (editandoId) {
-      const posts = cargarPosts();
-      const idx = posts.findIndex(p => p.id === editandoId);
-      if (idx < 0) { toast('No se encontró el anuncio a editar', '⚠️'); return; }
-      const updated = { ...posts[idx], ...datos };
-      if (passInput) {
-        // Nueva contraseña: nuevo salt + nuevo hash
-        const newSalt = generarSalt();
-        updated.salt = newSalt;
-        updated.passHash = hashConSal(passInput, newSalt);
+    const btn = $('btnSubmitPub');
+    btn.disabled = true;
+    const original = btn.textContent;
+    btn.textContent = editandoId ? 'Guardando…' : 'Publicando…';
+
+    try {
+      if (editandoId) {
+        /* -------- EDITAR (como admin) -------- */
+        const post = postsCache.find(p => p.id === editandoId);
+        if (!post) throw new Error('Anuncio no encontrado');
+
+        // Si el admin cambia la contraseña, necesitamos recalcular hash+salt (no permitido por RPC actual).
+        // Por simplicidad: la RPC no cambia la contraseña. Si el admin pone una nueva, se ignora.
+        // (El admin no necesita cambiar la contraseña del autor.)
+        const { data, error } = await supa.rpc('editar_post_admin', {
+          p_id: editandoId,
+          p_admin_pass: ADMIN_PASS,
+          p_tipo: datos.tipo,
+          p_nombre: datos.nombre,
+          p_uni: datos.uni,
+          p_carrera: datos.carrera,
+          p_ramo: datos.ramo,
+          p_descripcion: datos.descripcion,
+          p_monto: datos.monto,
+          p_ramos_extra: datos.ramosExtra,
+          p_whatsapp: datos.whatsapp
+        });
+        if (error) throw error;
+        if (data !== true) throw new Error('La clave admin del HTML no coincide con la del SQL');
+
+        // Recargar desde el servidor
+        await cargarPostsDesdeServidor();
+        const tipoEdit = datos.tipo;
+        editandoId = null;
+        $('formPub').reset(); cascadaForm.reset(); setModo('necesidad'); cerrarModal();
+        tabActual = tipoEdit; paginaActual = 1; setTab(tipoEdit);
+        toast('Cambios guardados', '💾');
+      } else {
+        /* -------- CREAR -------- */
+        const salt = generarSalt();
+        const post = {
+          ...datos,
+          id: nuevoId(),
+          creado: Date.now(),
+          salt,
+          passHash: hashConSal(passInput, salt)
+        };
+        await guardarPost(post);
+        $('formPub').reset(); cascadaForm.reset(); setModo('necesidad'); cerrarModal();
+        tabActual = post.tipo; paginaActual = 1; setTab(post.tipo);
+        mostrarModalPassword(passInput);
       }
-      // Si no se cambia la contraseña, se conserva salt y passHash originales
-      posts[idx] = updated;
-      LS.set(K.POSTS, posts);
-      const tipoEdit = datos.tipo;
-      editandoId = null;
-      $('formPub').reset(); cascadaForm.reset(); setModo('necesidad'); cerrarModal();
-      tabActual = tipoEdit; paginaActual = 1; setTab(tipoEdit);
-      if (passInput) mostrarModalPassword(passInput);
-      else toast('Cambios guardados', '💾');
-    } else {
-      // Nuevo anuncio: salt aleatorio + hash con salt
-      const salt = generarSalt();
-      const post = {
-        ...datos,
-        id: nuevoId(),
-        creado: Date.now(),
-        salt: salt,
-        passHash: hashConSal(passInput, salt)
-      };
-      guardarPost(post);
-      $('formPub').reset(); cascadaForm.reset(); setModo('necesidad'); cerrarModal();
-      tabActual = post.tipo; paginaActual = 1; setTab(post.tipo);
-      mostrarModalPassword(passInput);
+    } catch (err) {
+      console.error(err);
+      toast('Error al guardar. Revisa la consola (F12).', '❌');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = original;
     }
   });
 
+  // Formspree
   $('formSug').addEventListener('submit', async (e) => {
     e.preventDefault();
     const texto = $('sugTexto').value.trim();
@@ -1209,32 +1255,27 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch(FORMSPREE_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ _subject: 'Sugerencia anónima · AyudantiApp', mensaje: texto, origen: 'Buzón anónimo web', fecha: new Date().toLocaleString('es-CL') })
+        body: JSON.stringify({ _subject: 'Sugerencia anónima · AyudantiApp', mensaje: texto, fecha: new Date().toLocaleString('es-CL') })
       });
       if (!res.ok) throw new Error('Formspree no configurado');
       $('sugTexto').value = '';
       toast('¡Gracias! Tu sugerencia fue enviada.');
     } catch (err) {
-      const url = `mailto:${CORREO_SUGERENCIAS}?subject=${encodeURIComponent('Sugerencia anónima · AyudantiApp')}&body=${encodeURIComponent(texto)}`;
-      window.location.href = url;
-      toast('Abriendo tu correo para enviar la sugerencia…', '📮');
+      window.location.href = `mailto:${CORREO_SUGERENCIAS}?subject=${encodeURIComponent('Sugerencia anónima · AyudantiApp')}&body=${encodeURIComponent(texto)}`;
+      toast('Abriendo tu correo para enviar…', '📮');
     } finally {
       btn.disabled = false; btn.textContent = original;
     }
   });
 
+  // Triple clic en logo
   let clicks = 0, clickTimer = null;
-  const logo = $('logoLink');
-  if (logo) {
-    logo.addEventListener('click', () => {
-      clicks++;
-      clearTimeout(clickTimer);
-      clickTimer = setTimeout(() => { clicks = 0; }, 600);
-      if (clicks >= 3) { clicks = 0; clearTimeout(clickTimer); abrirModalAdmin(); }
-    });
-  }
-
-  aplicarAdminUI();
+  $('logoLink').addEventListener('click', () => {
+    clicks++;
+    clearTimeout(clickTimer);
+    clickTimer = setTimeout(() => { clicks = 0; }, 600);
+    if (clicks >= 3) { clicks = 0; clearTimeout(clickTimer); abrirModalAdmin(); }
+  });
 });
 </script>
 </body>
